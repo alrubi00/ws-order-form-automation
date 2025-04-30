@@ -15,6 +15,9 @@ jobs:
 
     - name: Install SSH Client
       run: sudo apt-get install -y openssh-client
+    
+    - name: Set up SSH Directory
+      run: mkdir -p ~/.ssh
 
     - name: Copy SSH key
       run: echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
