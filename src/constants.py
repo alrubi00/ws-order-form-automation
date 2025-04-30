@@ -123,6 +123,6 @@ prod_desc_with_no_batch_val = ['Pure Tincture - THC - 500MG', 'Pure Terpene-Infu
 value_pricing = {('FLWR-3.5-PLUS', 'Lime Wreck Haze'): '$5.00',
                  ('FLWR-3.5-PLUS', 'Melon Baller'): '$1.00',
                  ('HM-DSP-LVO-1G', 'Purple Paradox'): '$14.00',
-                 ('SS-50', 'Raspberry Lemonade'): '$3.00'}
+                ('CHOC100', 'Milk'): '$600.00'}
 
 # value_pricing = {}
