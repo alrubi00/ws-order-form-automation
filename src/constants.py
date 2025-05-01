@@ -16,7 +16,8 @@ ish_dict = {'Candy Games #25':'S', 'Candy Store #25':'S', 'Sugar Shack #5':'S', 
             'Han Solo Burger':'H/I', 'Knockout':'H/S', 'Baller\'s Game':'I', 'Oh My Thai':'H/S', 'Everglades OG':'H', 'Easy Button':'H',
             'Pineapple Daddy':'H', 'Pineapple Diesel':'H', 'Key Lime Divine': 'H/S', 'Master Key': 'H', 'Concord Grape': 'I', 'Honey Melon': 'H', 'Lemonade': 'S',
             'Strawberry Punch': 'S', 'Sweet Watermelon': 'H', 'Wild Blueberry': 'I', 'Banana Lemon Cupcake': 'H/S', 'Super Lemon Haze 2.0':'S',
-            'Galactic Warheads': 'H/I', 'Donny Burger x Banana Jealousy': 'H/I', 'Lime Wreck Haze': 'S', 'Crosstown Traffic': 'H/I', 'DX4': 'H'}
+            'Galactic Warheads': 'H/I', 'Donny Burger x Banana Jealousy': 'H/I', 'Lime Wreck Haze': 'S', 'Crosstown Traffic': 'H/I', 'DX4': 'H',
+            'Oreoz': 'H/I',}
 
 harvest_list = ['Flower Jar 3.5g (+)','Head Stash 3.5g','Premium Flower Jar 1g','Pre-Roll 1g', 'Pre-Roll Blunt 1g','Pre-Roll 7-Pack 3.5g']
 
