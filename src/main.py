@@ -4,7 +4,8 @@ import df_functions as dfuns
 import xlsx_functions as xfuns
 import functions as funs
 import acumatica as acu
-import email_w_attach as ewa
+# import email_w_attach as ewa
+import gmail_w_attach as gwa
 from openpyxl import Workbook
 from openpyxl.drawing.image import Image
 from datetime import datetime
@@ -189,7 +190,7 @@ sheet.freeze_panes = 'A8'
 new_workbook.save(ws_order_form_output)
 
 # email the output form
-# ewa.send_email(ws_order_form_output)
+gwa.send_email(ws_order_form_output)
 
 # clean up tmp files
 os.remove(file_name)
