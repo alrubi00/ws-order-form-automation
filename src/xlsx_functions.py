@@ -9,10 +9,9 @@ from openpyxl.styles import Font
 from datetime import datetime
 import xlwings as xw
 import pandas as pd
-import constants as cs
 import os
-import shutil
-from pathlib import Path
+import constants as cs
+import time
 
 # value pricing is added to the dataframe during dataframe transformation.
 # but we want to call it out visually in the xlsx form with a yellow highlight
@@ -37,34 +36,14 @@ def update_value_pricing_bg(sheet):
 # the downloaded report from acu doesn't play well with the code
 # you could manually resave and the file is then fine
 # this effectively does that 
-# def clean_excel_file(input_path, output_path):
-#     app = xw.App(visible=False)
-#     try:
-#         wb = app.books.open(input_path)
-#         wb.save(output_path)
-#         wb.close()
-#     finally:
-#         app.quit()
-#     return output_path
-
 def clean_excel_file(input_path, output_path):
-    # Ensure temp directory exists
-    temp_dir = 'C:/Temp'
-    os.makedirs(temp_dir, exist_ok=True)
-
-    # Copy input file to temp location
-    temp_input = os.path.join(temp_dir, Path(input_path).name)
-    shutil.copy2(input_path, temp_input)
-
-    # Process the copied file with Excel
     app = xw.App(visible=False)
     try:
-        wb = app.books.open(temp_input)
+        wb = app.books.open(input_path)
         wb.save(output_path)
         wb.close()
     finally:
         app.quit()
-
     return output_path
 
 # merge like product description columns so the same description isn't listed over and over and over
