@@ -15,7 +15,7 @@ today = datetime.now()
 date_for_file = today.strftime('%m%d%Y%H%M%S')
 
 # Ensure output directory exists
-SAVE_DIRECTORY = '../tmp/'
+SAVE_DIRECTORY = 'C:/python/ws-order-form-automation/tmp'
 os.makedirs(SAVE_DIRECTORY, exist_ok=True)
 
 def login():
