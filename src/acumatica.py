@@ -15,8 +15,10 @@ today = datetime.now()
 date_for_file = today.strftime('%m%d%Y%H%M%S')
 
 # Ensure output directory exists
-SAVE_DIRECTORY = '../tmp/'
-os.makedirs(SAVE_DIRECTORY, exist_ok=True)
+script_dir = os.path.dirname(os.path.abspath(__file__))
+SAVE_DIRECTORY = os.path.abspath(os.path.join(script_dir, '..', 'tmp'))
+mode=0o777
+os.makedirs(SAVE_DIRECTORY, mode, exist_ok=True)
 
 def login():
     session = requests.Session()
@@ -45,7 +47,7 @@ def login():
         print(f"[Login] Failed: {e}")
         return None
 
-    # Confirm the session has the correct .ASPXAUTH cookie
+    # confirm the session has the correct .ASPXAUTH cookie
     if '.ASPXAUTH' not in session.cookies.get_dict():
         print("[Login] .ASPXAUTH cookie not found.")
         return None
@@ -99,9 +101,10 @@ def generate_download_report(session, report_id):
         filename = f'{report_id}{date_for_file}.xlsx'
         file_path = os.path.join(SAVE_DIRECTORY, filename)
 
-        with open(file_path, 'wb') as f:
+        with open(file_path, 'wb+') as f:
             f.write(file_response.content)
             print(f"[Download] File saved: {file_path}")
+            os.chmod(file_path, 0o777)
 
         time.sleep(5)
         # session.close()

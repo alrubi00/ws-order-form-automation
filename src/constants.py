@@ -121,9 +121,9 @@ prod_desc_with_no_batch_val = ['Pure Tincture - THC - 500MG', 'Pure Terpene-Infu
                                'Gummies - Rapid Onset - 100mg THC', 'Fruit Drops - 100mg THC', 'Gummies - Hash Rosin - 100mg THC', 'Gummies 100mg THC',
                                'Chocolate 100mg THC', 'Gummies 1000mg THC', 'Gummies 400mg THC', 'Chocolate 400mg THC', 'Chocolate 1000mg THC']
 
-value_pricing = {('FLWR-3.5-PLUS', 'Lime Wreck Haze'): '$5.00',
-                 ('FLWR-3.5-PLUS', 'Melon Baller'): '$1.00',
-                 ('HM-DSP-LVO-1G', 'Purple Paradox'): '$14.00',
-                ('CHOC100', 'Milk'): '$600.00'}
+# value_pricing = {('FLWR-3.5-PLUS', 'Lime Wreck Haze'): '$5.00',
+#                  ('FLWR-3.5-PLUS', 'Melon Baller'): '$1.00',
+#                  ('HM-DSP-LVO-1G', 'Purple Paradox'): '$14.00',
+#                 ('CHOC100', 'Milk'): '$600.00'}
 
-# value_pricing = {}
+value_pricing = {}

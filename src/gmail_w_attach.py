@@ -18,10 +18,20 @@ def send_email(file_path):
         sender = 'happyvalleybiteam@gmail.com'
         password = 'yuom ejkm rjpy zany'
         attachment = file_path
+        # recipients = [
+        # "alan.rubin@happyvalley.org",
+        # "kai.earthsong@happyvalley.org",
+        # "ellida.cornavaca@happyvalley.org",
+        # "jeremy.nestor@happyvalley.org",
+        # "gilly.motta@happyvalley.org",
+        # "heather.lovett@happyvalley.org",
+        # "shannon.oliver@happyvalley.org"
+        #     ]
+
         recipients = [
         "alan.rubin@happyvalley.org",
-        "alanrubin00@yahoo.com",
-        "alrubi13@gmail.com",
+        "kai.earthsong@happyvalley.org",
+        "ellida.cornavaca@happyvalley.org"
             ]
 
         msg = MIMEMultipart()
