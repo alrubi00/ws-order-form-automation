@@ -15,12 +15,16 @@ import os
 today = datetime.now()
 date_for_file = today.strftime('%m%d%Y%H%M%S')
 img_path = '../img'
-tmp_path = '../tmp'
-data_path = '../data'
+# tmp_path = '../tmp'
+# data_path = '../data'
 logo_file_name = 'hv_logo_sized_201_53.png'
 tmp_xlsx_name = 'Wholesale_Order_Form.xlsx'
 sheet_name = 'HVVWSGoodsOrderingSheet'
 ws_order_form_name = f'Wholesale_Order_Form_{date_for_file}.xlsx'
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+tmp_path = os.path.abspath(os.path.join(script_dir, '..', 'tmp'))
+data_path = os.path.abspath(os.path.join(script_dir, '..', 'data'))
 
 ws_order_form_output = funs.join_dir_file(data_path, ws_order_form_name)
 create_logo_path = funs.join_dir_file(img_path, logo_file_name)
@@ -28,9 +32,6 @@ create_tmp_xlsx_path = funs.join_dir_file(tmp_path, tmp_xlsx_name)
 
 img = Image(create_logo_path)
 file_name = create_tmp_xlsx_path
-
-# img = Image('img/hv_logo_sized_201_53.png')
-# file_name = 'data/Wholesale_Order_Form.xlsx'
 
 wb = Workbook()
 ws = wb.active
@@ -79,6 +80,12 @@ main_df = dfuns.remove_row_with_zero_qty(main_df, 'Qty Available for Sale')
 
 # remove the strain DX4 (not for general whoesale)
 main_df = dfuns.remove_row_with_val_in_col(main_df, 'Strain', 'DX4')
+
+# remove the strain Larry Berry (not for general whoesale)
+main_df = dfuns.remove_row_with_val_in_col(main_df, 'Strain', 'Larry Berry')
+
+# remove the strain Black Magic (not for general whoesale)
+main_df = dfuns.remove_row_with_val_in_col(main_df, 'Strain', 'Black Magic')
 
 # sort by Inventory ID and in wanted order
 sorted_df = dfuns.order_by_inventory_id(main_df)

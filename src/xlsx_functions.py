@@ -46,6 +46,7 @@ def clean_excel_file(input_path, output_path):
         app.quit()
     return output_path
 
+
 # merge like product description columns so the same description isn't listed over and over and over
 def merge_cells_in_column(sheet, column_letter, start_row):
 
