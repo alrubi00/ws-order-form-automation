@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import constants as cs
 from datetime import datetime, timedelta
+import warnings
 
 # updates current pricing with a value price point
 def value_pricing_update(row):
@@ -32,13 +33,16 @@ def remove_row_with_zero_qty(df, col):
     return df
 
 # this will function will remove a row with a specified value in a specified column
-# this is a separate function from the above with_zero_qty
+# this is a separate function from the above remove_row_with_zero_qty
 # because that function accounts for nulls or ''
 # the only current use case is to remove reserved strains for
 # specific customers that shouldn't be available for wholesale
-def remove_row_with_val_in_col(df, col, val):
-    df = df[df[f'{col}'] != val]
-    return df
+# def remove_row_with_val_in_col(df, col, val):
+#     df = df[df[f'{col}'] != val]
+#     return df
+def remove_row_with_val_in_col(df, col, vals):
+    filtered_df = df[~df[col].isin(vals)]
+    return filtered_df
 
 # currently in acu the cfx gummy naming doesn't generally combine the flavor
 # with it's effect (sleep, focus, etc.) so it's done here leveraging a hardcoded map
@@ -53,44 +57,95 @@ def add_value_to_col_based_on_other_col(df, col_to_fill, map, based_on_col):
 
 # create the main df that will drive the creation of the order form by combining
 # the 3 dataframes from the 3 endpoint downloads
-def merge_dfs(df1, df2, df3):
-    
-    merge_keys = ["Inventory ID", "Product Description", "Strain"]
 
-    # merge in df2 into df1 first
+def merge_dfs(df1, df2, df3):
+    merge_keys = ["Inventory ID", "Product Description", "Strain"]
+    cols_to_merge = ['Total THC', 'THCA', 'Total Terpenes', 'TAC', 'Harvest Date']
+    
+    # Merge df2 into df1
     merged_df = pd.merge(
-        df1, 
-        df2[merge_keys + ['Total THC', 'THCA', 'Total Terpenes', 'TAC', 'Harvest Date']],
+        df1,
+        df2[merge_keys + cols_to_merge],
         on=merge_keys,
         how='left'
     )
 
-    # now merge in df3 in
-    merged_df = pd.merge(
-        merged_df, 
-        df3[merge_keys + ['Total THC', 'THCA', 'Total Terpenes', 'TAC', 'Harvest Date']],
-        on=merge_keys,
-        how='left',
-        suffixes=('', '_in_transit')
-    )
+    if not df3.empty:
+        df3_copy = df3.copy()
+        
+        # calc min THC per group, this handles nans
+        df3_copy['min_thc'] = df3_copy.groupby(merge_keys)['Total THC'].transform('min')
+        
+        # select rows with min THC (or where both values are NaN)
+        min_mask = (df3_copy['Total THC'] == df3_copy['min_thc']) | (df3_copy['Total THC'].isna() & df3_copy['min_thc'].isna())
+        df3_min_thc = df3_copy[min_mask][merge_keys + cols_to_merge]
+        
+        # If we have valid data, merge it
+        if not df3_min_thc.empty:
+            # Merge in df3 (minimal THC rows)
+            merged_df = pd.merge(
+                merged_df,
+                df3_min_thc,
+                on=merge_keys,
+                how='left',
+                suffixes=('', '_df3')
+            )
 
-    cols_to_merge = ['Total THC', 'THCA', 'Total Terpenes', 'TAC', 'Harvest Date']
+            # keep the lowest 'Total THC' value handling nan
+            merged_df['Total THC'] = merged_df[['Total THC', 'Total THC_df3']].min(axis=1)
 
-    # now drop the _y columns (from df3), and rename _x columns (from df2) back to normal
-    for col in cols_to_merge:
-        if f"{col}_x" in merged_df.columns:
-            merged_df[col] = merged_df[f"{col}_x"]
-        # drop both _x and _y to clean up
-        merged_df.drop([f"{col}_x", f"{col}_y"], axis=1, inplace=True, errors='ignore')
+            # the other columns, fill in missing values from df3 if available
+            for col in ['THCA', 'Total Terpenes', 'TAC', 'Harvest Date']:
+                df3_col = f"{col}_df3"
+                if df3_col in merged_df.columns:
+                    merged_df[col] = merged_df[col].combine_first(merged_df[df3_col])
+                    merged_df.drop(columns=[df3_col], inplace=True)
 
-    for col in cols_to_merge:
-        in_transit_column = f"{col}_in_transit"
-        # merge the columns
-        merged_df[col] = merged_df[col].combine_first(merged_df[in_transit_column])
-        # drop the _in_transit column
-        merged_df.drop(columns=[in_transit_column], inplace=True)
+            # drop 'Total THC_df3' column - no longer needed
+            if 'Total THC_df3' in merged_df.columns:
+                merged_df.drop(columns=['Total THC_df3'], inplace=True)
 
     return merged_df
+
+# def merge_dfs(df1, df2, df3):
+#     merge_keys = ["Inventory ID", "Product Description", "Strain"]
+#     cols_to_merge = ['Total THC', 'THCA', 'Total Terpenes', 'TAC', 'Harvest Date']
+
+#     # Merge df2 into df1
+#     merged_df = pd.merge(
+#         df1,
+#         df2[merge_keys + cols_to_merge],
+#         on=merge_keys,
+#         how='left'
+#     )
+
+#     # Get rows from df3 with the lowest 'Total THC' per group
+#     df3_min_thc = df3.loc[
+#         df3.groupby(merge_keys)['Total THC'].idxmin()
+#     ][merge_keys + cols_to_merge]
+
+#     # Merge in df3 (minimal THC rows)
+#     merged_df = pd.merge(
+#         merged_df,
+#         df3_min_thc,
+#         on=merge_keys,
+#         how='left',
+#         suffixes=('', '_df3')
+#     )
+
+#     # Keep the lowest 'Total THC' value
+#     merged_df['Total THC'] = merged_df[['Total THC', 'Total THC_df3']].min(axis=1)
+
+#     # For the other columns, fill in missing values from df3 if available
+#     for col in ['THCA', 'Total Terpenes', 'TAC', 'Harvest Date']:
+#         df3_col = f"{col}_df3"
+#         merged_df[col] = merged_df[col].combine_first(merged_df[df3_col])
+#         merged_df.drop(columns=[df3_col], inplace=True)
+
+#     # Drop the auxiliary 'Total THC_df3' column
+#     merged_df.drop(columns=['Total THC_df3'], inplace=True)
+
+#     return merged_df
 
 # hardcoded drop of columns found in download
 def remove_columns(df):
@@ -192,3 +247,15 @@ def insert_start_row(df, cat_by_inventory_id):
     new_df = pd.DataFrame(new_rows)
     
     return new_df
+
+def group_and_sort(df):
+    warnings.filterwarnings('ignore', category=DeprecationWarning, message='.*operated on the grouping columns.*')
+
+    def get_min_thc_row(group):
+        min_thc_idx = group['Total THC'].idxmin(skipna=True) if not group['Total THC'].isna().all() else group.index[0]
+        return group.loc[min_thc_idx]
+
+    df_grouped = df.groupby(['Inventory ID', 'Product Description', 'Strain'], dropna=False).apply(get_min_thc_row)
+    df_grouped = df_grouped.reset_index(drop=True)
+
+    return df_grouped

@@ -14,7 +14,7 @@ def send_email(file_path):
         today = datetime.now()
         date = today.strftime('%m/%d/%Y - %H:%M')
         subject = f'Happy Valley Wholesale Order Form {date}'
-        body = f'Please find the attached Wholesale Order Form - {date}'
+        body = f'Please find the attached Wholesale Order Form - {date} - NOTE: Enable Editing once opened'
         sender = 'happyvalleybiteam@gmail.com'
         password = 'yuom ejkm rjpy zany'
         attachment = file_path
@@ -29,9 +29,7 @@ def send_email(file_path):
         #     ]
 
         recipients = [
-        "alan.rubin@happyvalley.org",
-        "kai.earthsong@happyvalley.org",
-        "ellida.cornavaca@happyvalley.org"
+        "alan.rubin@happyvalley.org"
             ]
 
         msg = MIMEMultipart()
