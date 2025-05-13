@@ -14,17 +14,17 @@ import os
 
 today = datetime.now()
 date_for_file = today.strftime('%m%d%Y%H%M%S')
-img_path = '../img'
-# tmp_path = '../tmp'
-# data_path = '../data'
+# img_path = '../img'
 logo_file_name = 'hv_logo_sized_201_53.png'
 tmp_xlsx_name = 'Wholesale_Order_Form.xlsx'
 sheet_name = 'HVVWSGoodsOrderingSheet'
 ws_order_form_name = f'Wholesale_Order_Form_{date_for_file}.xlsx'
+strain_no_sale_list = ['DX4', 'Larry Berry', 'Black Magic']
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 tmp_path = os.path.abspath(os.path.join(script_dir, '..', 'tmp'))
 data_path = os.path.abspath(os.path.join(script_dir, '..', 'data'))
+img_path = os.path.abspath(os.path.join(script_dir, '..', 'img'))
 
 ws_order_form_output = funs.join_dir_file(data_path, ws_order_form_name)
 create_logo_path = funs.join_dir_file(img_path, logo_file_name)
@@ -44,60 +44,46 @@ wb.save(file_name)
 
 # aside from making the login/logout call, below makes 3 calls to generate each report
 # and 3 calls download the report in xlsx format
-# batch_info_file - WS031733 - FGA Wholesale With Batch Info - CLAEBAvailable
-# valid_qty_file -  WS040125 - FGA Wholesale With Valid Qty - FGAWSOF
-# in_transit_file - WS040725 - In-Transit Inventory - INTRANSITINV
+# df_batch - WS050925 - FGA Wholesale With Batch Info No Group or Sort - CLAEBAvailableNoGroup
+# df_qty -  WS040125 - FGA Wholesale With Valid Qty - FGAWSOF
+# df_in_transit - WS040725 - In-Transit Inventory - INTRANSITINV
 
-in_transit_session = acu.login()
-in_transit_file = acu.generate_download_report(in_transit_session, 'INTRANSITINV')
-in_transit_end_session = acu.close_acumatica_session(in_transit_session)
-in_transit_cleaned = funs.join_dir_file(tmp_path, f'in-transit-cleaned-{date_for_file}.xlsx')
-clean_in_transit = xfuns.clean_excel_file(in_transit_file, in_transit_cleaned)
-df_in_transit = pd.read_excel(clean_in_transit)
+# create dataframe for - WS040725 - In-Transit Inventory - INTRANSITINV
+df_in_transit = funs.login_generate_download_report_df(tmp_path, date_for_file, 'INTRANSITINV')
 
-batch_session = acu.login()
-batch_info_file = acu.generate_download_report(batch_session, 'CLAEBAvailable')
-batch_end_session = acu.close_acumatica_session(batch_session)
-batch_cleaned = funs.join_dir_file(tmp_path, f'batch-cleaned-{date_for_file}.xlsx')
-clean_batch = xfuns.clean_excel_file(batch_info_file, batch_cleaned)
-df_batch = pd.read_excel(clean_batch)
+# create dataframe for WS050925 - FGA Wholesale With Batch Info No Group or Sort - CLAEBAvailableNoGroup
+df_batch_grouped = funs.login_generate_download_report_df(tmp_path, date_for_file, 'CLAEBAvailableNoGroup')
 
-qty_session = acu.login()
-valid_qty_file = acu.generate_download_report(qty_session, 'FGAWSOF')
-qty_end_session = acu.close_acumatica_session(qty_session)
-qty_cleaned = funs.join_dir_file(tmp_path, f'qty-cleaned-{date_for_file}.xlsx')
-clean_qty = xfuns.clean_excel_file(valid_qty_file, qty_cleaned)
-df_qty = pd.read_excel(clean_qty)
+# create dataframe for WS040125 - FGA Wholesale With Valid Qty - FGAWSOF
+df_qty = funs.login_generate_download_report_df(tmp_path, date_for_file, 'FGAWSOF')
 
 # now start building dataframe 
-main_df = dfuns.merge_dfs(df_qty, df_batch, df_in_transit)
+main_df = dfuns.merge_dfs(df_qty, df_batch_grouped, df_in_transit)
 
+# in case you couldn't tell by the function name :), removing dupe rows
 main_df = dfuns.drop_dupe_rows(main_df)
 
-# main_df = dfuns.qty_case_count_conv(main_df)
 # remove row if product has 0 for quantity
 main_df = dfuns.remove_row_with_zero_qty(main_df, 'Qty Available for Sale')
 
 # remove the strain DX4 (not for general whoesale)
-main_df = dfuns.remove_row_with_val_in_col(main_df, 'Strain', 'DX4')
+main_df = dfuns.remove_row_with_val_in_col(main_df, 'Strain', strain_no_sale_list)
 
-# remove the strain Larry Berry (not for general whoesale)
-main_df = dfuns.remove_row_with_val_in_col(main_df, 'Strain', 'Larry Berry')
-
-# remove the strain Black Magic (not for general whoesale)
-main_df = dfuns.remove_row_with_val_in_col(main_df, 'Strain', 'Black Magic')
-
-# sort by Inventory ID and in wanted order
+# sort by Inventory ID and in specified order
 sorted_df = dfuns.order_by_inventory_id(main_df)
 
-# remove unneeded columns by calling remove columns function
+# update harvest date's date format
 sorted_df['Harvest Date'] = sorted_df['Harvest Date'].dt.strftime('%m/%d/%Y')
 
+# some old harvest dates can sneak into the dataset - generally edible or extracts or muze - they aren't to be published  
 sorted_df = dfuns.remove_old_dates(sorted_df, 'Harvest Date')
 
 # column header updates
 cleaned_cols_df = sorted_df.rename(columns={'Strain': 'Strain/Flavor', 'THCA': 'THC-A', 'Qty Available for Sale': 'Qty. Available'})
 
+## the next 4 steps add coluns to the df from hardcoded dictionaries
+## this accomodates values that either aren't in acumatica or are really tough to get out acu
+ 
 # add column with I/S/H value
 ish_col_added_df = dfuns.add_col_with_vals_from_dict(cleaned_cols_df, 'Strain/Flavor', cs.ish_dict, 'I/S/H')
 
@@ -200,12 +186,7 @@ new_workbook.save(ws_order_form_output)
 gwa.send_email(ws_order_form_output)
 
 # clean up tmp files
-os.remove(file_name)
-os.remove(in_transit_file)
-os.remove(in_transit_cleaned)
-os.remove(batch_info_file)
-os.remove(batch_cleaned)
-os.remove(valid_qty_file)
-os.remove(qty_cleaned)
-# clean up old order forms
+funs.delete_files_from_directory(tmp_path)
+
+# clean out older files
 funs.delete_old_files(data_path)
