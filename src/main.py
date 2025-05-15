@@ -37,7 +37,7 @@ wb = Workbook()
 ws = wb.active
 
 xfuns.format_white_bg(ws, 'A1:FF550')
-ws.add_image(img, 'B2')
+ws.add_image(img, 'C2')
 
 ws.title = sheet_name
 wb.save(file_name)
@@ -95,6 +95,9 @@ serve_col_added_df = dfuns.add_col_with_vals_from_dict(net_col_added_df, 'Invent
 
 # add price column with value
 price_col_added_df = dfuns.add_col_with_vals_from_dict(serve_col_added_df, 'Inventory ID', cs.price_ea, 'Price/EA')
+
+# add volume pricing
+price_col_added_df = dfuns.add_col_with_vals_from_dict(price_col_added_df, 'Inventory ID', cs.volume_pricing, ' ')
 
 # this accomodates when the wholesale team wants a product to be on sale or have value pricing
 price_col_added_df['Price/EA'] = price_col_added_df.apply(dfuns.value_pricing_update, axis=1)
@@ -171,9 +174,16 @@ xfuns.add_separator_row(sheet)
 xfuns.add_total_sum(sheet, last_total_row)
 xfuns.merge_cells_in_column(sheet, 'B', 9)
 xfuns.convert_currency(sheet, 'R')
+xfuns.update_color_in_column(sheet, 'S', 'FCE4D6')
+xfuns.merge_cells_in_column(sheet, 'S', 9)
 # widening the Total column so larger totals doesn't
 # get converted 'visually' to #### because the column width is too narrow
 sheet.column_dimensions['R'].width = 15
+# widening the Volume Pricing column to fit Volume Pricing messaging
+sheet.column_dimensions['S'].width = 27
+xfuns.word_wrap_column(sheet, 'S')
+xfuns.remove_border(sheet)
+sheet.column_dimensions['B'].hidden = True
 xfuns.create_header(sheet)
 
 # freeze first 7 rows so you don't loose column headers

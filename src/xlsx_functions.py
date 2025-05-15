@@ -252,13 +252,13 @@ def update_cat_white(sheet):
 def create_header(sheet):
     today = datetime.now()
     date = today.strftime('%m/%d/%Y')
-    left_align = Alignment(horizontal='left')
+    right_align = Alignment(horizontal='right')
     wg_cell = sheet['C2']
     wg_cell.value = 'WHOLESALE GOODS'
-    wg_cell.alignment = left_align
+    wg_cell.alignment = right_align
     os_cell = sheet['C3']
     os_cell.value = 'ORDERING SHEET'
-    os_cell.alignment = left_align
+    os_cell.alignment = right_align
     date_cell = sheet['Q2']
     date_cell.value = date
 
@@ -307,3 +307,33 @@ def item_total(sheet):
             formula = f'=IFERROR(IF(Q{row}="","$0.00",ROUND(Q{row}*P{row},2)),"0")'
             # =IFERROR(IF(Q11="","$0.00",ROUND(Q11*P11,2)),"0")
             sheet[f'R{row}'] = formula
+
+# set column to word wrap and format text - yes, poorly named function
+def word_wrap_column(ws, column):
+    for cell in ws[column]:
+        cell.alignment = Alignment(wrap_text=True, horizontal='center', vertical='center')
+        cell.font = Font(name='Calibri', size=12, bold=True, italic=False, color='000000')
+
+def remove_border(sheet):
+    no_border = Border(
+    # left=Side(border_style=None),
+    right=Side(border_style=None),
+    top=Side(border_style=None),
+    bottom=Side(border_style=None)
+)
+    # Apply the no_border style to cell A1
+    cell = sheet['S7']
+    cell.border = no_border
+
+def update_color_in_column(sheet, column, color):
+    fill_color = PatternFill(fill_type='solid', start_color=color, end_color=color)
+
+    column_letter = column
+    start_row = 9
+
+    column_index = openpyxl.utils.column_index_from_string(column_letter)
+
+    for row in sheet.iter_rows(min_row=start_row, min_col=column_index, max_col=column_index):
+        cell = row[0]
+        if cell.value is not None:
+            cell.fill = fill_color
