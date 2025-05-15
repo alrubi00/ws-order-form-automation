@@ -119,11 +119,32 @@ prod_desc_with_no_batch_val = ['Pure Tincture - THC - 500MG', 'Pure Terpene-Infu
                                'CuratedFX Stir Stix - 50mg THC', 'Gummies Curated FX - CALM - 100mg THC', 'Gummies Curated FX - ENERGY - 100mg THC',
                                'Gummies Curated FX - FOCUS - 100mg THC', 'Gummies Curated FX - SLEEP - 100mg THC', 'Gummies Curated FX - 20:1 CBD:THC - 100mg THC',
                                'Gummies - Rapid Onset - 100mg THC', 'Fruit Drops - 100mg THC', 'Gummies - Hash Rosin - 100mg THC', 'Gummies 100mg THC',
-                               'Chocolate 100mg THC', 'Gummies 1000mg THC', 'Gummies 400mg THC', 'Chocolate 400mg THC', 'Chocolate 1000mg THC']
+                               'Chocolate 100mg THC', 'Gummies 1000mg THC', 'Gummies 400mg THC', 'Chocolate 400mg THC', 'Chocolate 1000mg THC', 'Pre-Roll "Variety" 5-Pack 2.5g', 'Pre-Roll 5-Pack 5g']
 
+# FORMAT EXAMPLE - DO NOT DELETE THIS
 # value_pricing = {('FLWR-3.5-PLUS', 'Lime Wreck Haze'): '$5.00',
 #                  ('FLWR-3.5-PLUS', 'Melon Baller'): '$1.00',
 #                  ('HM-DSP-LVO-1G', 'Purple Paradox'): '$14.00',
 #                 ('CHOC100', 'Milk'): '$600.00'}
 
-value_pricing = {}
+value_pricing = {('HM-DSP-LVO-1G', 'CuratedFX - Sleep'): '$15.00',
+                 ('HM-DSP-LVO-1G', 'CuratedFX - Calm'): '$15.00',
+                 ('HM-DSP-LVO-.5G', 'CuratedFX - Calm'): '$9.00',
+                ('HM-DSP-LVO-.5G', 'CuratedFX - Sleep'): '$9.00',
+                ('LVO-CART-.5', 'CuratedFX - Sleep'): '$8.00',
+                ('LVO-CART-.5', 'CuratedFX - Calm'): '$8.00',
+                ('LVO-CART-1', 'CuratedFX - Sleep'): '$12.50',
+                ('LVO-CART-1', 'CuratedFX - Calm'): '$12.50'}
+
+# value_pricing = {}
+
+volume_pricing = {'FLWR-3.5-PLUS': 'Purchase 10+ cases get all for $15/ unit *Excludes Head Stash*',
+                  'PRT-7': '10+ cases get $17.50 per unit',
+                  'HM-DSP-LVO-1G': '10+ Cases of Vape gets $1 off per unit',
+                  'HM-DSP-LVO-.5G': '10+ Cases of Vape gets $1 off per unit',
+                  'LVO-CART-1': '10+ Cases of Vape gets $1 off per unit',
+                  'LVO-CART-.5': '10+ Cases of Vape gets $1 off per unit',
+                  'GUM100-RAPID': '10+ Cases of Gummies gets $2 off per unit',
+                  'GUM100': '10+ Cases of Gummies gets $2 off per unit',
+                  'GUM-HR-100': '10+ Cases of Gummies gets $2 off per unit',
+                  'FD100': '10+ Cases of Fruit Drops gets $2 off per unit'}
