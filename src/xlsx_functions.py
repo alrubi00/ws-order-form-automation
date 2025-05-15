@@ -321,7 +321,6 @@ def remove_border(sheet):
     top=Side(border_style=None),
     bottom=Side(border_style=None)
 )
-    # Apply the no_border style to cell A1
     cell = sheet['S7']
     cell.border = no_border
 
