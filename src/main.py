@@ -78,6 +78,9 @@ sorted_df['Harvest Date'] = sorted_df['Harvest Date'].dt.strftime('%m/%d/%Y')
 # some old harvest dates can sneak into the dataset - generally edible or extracts or muze - they aren't to be published  
 sorted_df = dfuns.remove_old_dates(sorted_df, 'Harvest Date')
 
+# remove harvest date from variety pack
+sorted_df.loc[sorted_df['Inventory ID'].isin(['PR5-2.5', 'PR5-5']), 'Harvest Date'] = ''
+
 # column header updates
 cleaned_cols_df = sorted_df.rename(columns={'Strain': 'Strain/Flavor', 'THCA': 'THC-A', 'Qty Available for Sale': 'Qty. Available'})
 
@@ -185,6 +188,7 @@ xfuns.word_wrap_column(sheet, 'S')
 xfuns.remove_border(sheet)
 sheet.column_dimensions['B'].hidden = True
 xfuns.create_header(sheet)
+sheet.sheet_view.zoomScale = 75
 
 # freeze first 7 rows so you don't loose column headers
 sheet.freeze_panes = 'A8'
