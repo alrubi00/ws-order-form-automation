@@ -227,7 +227,7 @@ def add_separator_row(sheet):
 
         # check conditions for color
         if first_cell is None and second_cell is None:
-            if third_cell == "CuratedFX Gummies - Rapid Onset" or third_cell == "CuratedFX Stir Stix - Rapid Onset":
+            if third_cell == "CuratedFX Gummies - Rapid Onset - 100mg THC" or third_cell == "CuratedFX Stir Stix - Rapid Onset - 50mg THC":
                 for col in range(1, 18):
                     row[col].fill = green_fill
             elif third_cell == "muze - 7g":

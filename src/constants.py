@@ -26,7 +26,7 @@ ordered_ids = ['HEAD-STASH-3.5', 'FLWR-3.5-PLUS', 'FLWR-3.5', 'PR1', 'PR1-KIEF',
                'PR-MNR', 'FP-MNR', 'FP-MNR-STR', 'PR-MNR-STR', 'PURET-500', 'PURET-TERP-500', 'RSLV-1:1-250',
                'RSO-TINC-500', 'REMT-1:1-250', 'HVG-6-SEEDPACK', 'HM-DSP-LVO-.5G', 'HM-DSP-LVO-1G', 'LVO-CART-.5', 'LVO-CART-1',
                'LHR-CART-.5', 'SS-50', 'CFX-SS-50', 'GUM100-CFX-CALM', 'GUM100-CFX-ENERGY', 'GUM100-CFX-FOCUS',
-               'GUM100-CFX-SLEEP', 'GUM100-CFX-20:1', 'GUM5-CFX-20:1-P', 'GUM100-RAPID', 'FD100', 'GUM-HR-50', 'GUM-HR-100',
+               'GUM100-CFX-SLEEP', 'GUM100-CFX-20:1', 'GUM100-CFX-RELIEF', 'GUM5-CFX-20:1-P', 'GUM100-RAPID', 'FD100', 'GUM-HR-50', 'GUM-HR-100',
                'GUM100', 'CHOC100', 'GUM400', 'GUM1000', 'CHOC400', 'CHOC1000', 'LHR-COLDCURE', 'LHR-JAM', 'TRD-HASH']
 
 cat_by_inventory_id = {'PR1': 'PRE-ROLLS 1g', 'PR1-KIEF': 'PRE-ROLLS 1g - KIEF', 'PRT-7': 'PRE-ROLL 7-Pack 3.5g', 'LVO-CART-1': '1g 510', 'HM-DSP-LVO-.5G': 'The Hitmaker - .5g Disposable Vape',
@@ -43,7 +43,7 @@ cat_by_inventory_id = {'PR1': 'PRE-ROLLS 1g', 'PR1-KIEF': 'PRE-ROLLS 1g - KIEF',
                     'CHOC400': 'Chocolates (Med Dose) - 400mg THC & 1000mg THC', 'GUM100-CFX-FOCUS': 'CuratedFX Gummies - Rapid Onset - 100mg THC', 'GUM100-CFX-SLEEP': 'CuratedFX Gummies - Rapid Onset - 100mg THC',
                     'PFWR-1': 'Premium Flower 1g', 'GUM1000': 'Original Gummies (Med Dose) - 400mg THC & 1000mg THC', 'LVO-CART-.5': '.5g 510', 'PURET-TERP-500': 'TOPICAL/ TINCTURES',
                     'TRD-HASH': 'Traditional Style Hash', 'HVG-6-SEEDPACK': 'Happy Valley Retail Seed Pack - 6 Seeds', 'GUM5-CFX-20:1-P': 'CuratedFX Gummies - Rapid Onset - 100mg THC',
-                    'GUM-HR-100': 'Hash Rosin Gummies - 100mg THC', 'GUM-HR-50': 'Hash Rosin Gummies', 'GUM100-CFX-20:1':'CuratedFX Gummies - Rapid Onset - 100mg THC'}
+                    'GUM-HR-100': 'Hash Rosin Gummies - 100mg THC', 'GUM-HR-50': 'Hash Rosin Gummies', 'GUM100-CFX-20:1':'CuratedFX Gummies - Rapid Onset - 100mg THC', 'GUM100-CFX-RELIEF': 'CuratedFX Gummies - Rapid Onset - 100mg THC'}
 
 price_ea = {'PR1': '$5.00', 'PR1-KIEF': '$5.00', 'PRT-7': '$20.00', 'LVO-CART-1': '$16.00', 'HM-DSP-LVO-.5G': '$11.00',
                     'HM-DSP-LVO-1G': '$17.50', 'GUM100-CFX-ENERGY': '$12.50', 'REMT-1:1-250': '$20.00',
@@ -58,7 +58,7 @@ price_ea = {'PR1': '$5.00', 'PR1-KIEF': '$5.00', 'PRT-7': '$20.00', 'LVO-CART-1'
                     'MZ-7G-SWTM': '$15.00', 'MZ-7G-WLDB': '$15.00', 'CHOC1000': '$45.00', 'GUM400': '$25.00',
                     'CHOC400': '$25.00', 'GUM100-CFX-FOCUS': '$12.50', 'GUM100-CFX-SLEEP': '$12.50',
                     'PFWR-1': '$8.00', 'GUM1000': '$45.00', 'LVO-CART-.5': '$10.00', 'PURET-TERP-500': '$20.00',
-                    'TRD-HASH': '$30.00', 'HVG-6-SEEDPACK': '$30.00', 'GUM5-CFX-20:1-P': '$12.50', 'GUM-HR-100': '$12.50', 'GUM100-CFX-20:1':'$12.50'}
+                    'TRD-HASH': '$30.00', 'HVG-6-SEEDPACK': '$30.00', 'GUM5-CFX-20:1-P': '$12.50', 'GUM-HR-100': '$12.50', 'GUM100-CFX-20:1':'$12.50', 'GUM100-CFX-RELIEF': '$12.50'}
 
 net_weight_vol = {'PR1': '1g', 'PR1-KIEF': '1g', 'PRT-7': '3.5g', 'LVO-CART-1': '1g', 'HM-DSP-LVO-.5G': '.5g',
                     'HM-DSP-LVO-1G': '1g', 'GUM100-CFX-ENERGY': ' ', 'REMT-1:1-250': '30ml',
@@ -73,7 +73,7 @@ net_weight_vol = {'PR1': '1g', 'PR1-KIEF': '1g', 'PRT-7': '3.5g', 'LVO-CART-1': 
                     'MZ-7G-SWTM': '7g', 'MZ-7G-WLDB': '7g', 'CHOC1000': ' ', 'GUM400': ' ',
                     'CHOC400': ' ', 'GUM100-CFX-FOCUS': ' ', 'GUM100-CFX-SLEEP': ' ',
                     'PFWR-1': '1g', 'GUM1000': ' ', 'LVO-CART-.5': '.5g', 'PURET-TERP-500': '30ml',
-                    'TRD-HASH': '1g', 'HVG-6-SEEDPACK': ' ', 'GUM5-CFX-20:1-P': ' ', 'GUM-HR-100': ' ', 'GUM100-CFX-20:1':' '}
+                    'TRD-HASH': '1g', 'HVG-6-SEEDPACK': ' ', 'GUM5-CFX-20:1-P': ' ', 'GUM-HR-100': ' ', 'GUM100-CFX-20:1':' ', 'GUM100-CFX-RELIEF': ' '}
 
 case_count = {'PR1': 100, 'PR1-KIEF': 100, 'PRT-7': 50, 'LVO-CART-1': 50, 'HM-DSP-LVO-.5G': 50,
                     'HM-DSP-LVO-1G': 50, 'GUM100-CFX-ENERGY': 50, 'REMT-1:1-250': 50,
@@ -83,12 +83,12 @@ case_count = {'PR1': 100, 'PR1-KIEF': 100, 'PRT-7': 50, 'LVO-CART-1': 50, 'HM-DS
                     'RSLV-1:1-250': 50, 'PR5-5-BLNT': 50, 'PR-MNR': 50, 'FP-MNR': 50,
                     'FP-MNR-STR': 50, 'PR-MNR-STR': 50, 'LHR-CART-.5': 50, 'LHR-COLDCURE': 50, 'LHR-JAM': '??',
                     'HEAD-STASH-3.5': 50, 'PR5-5': 50, 'PR5-2.5': 50, 'RSO-TINC-500': 50,
-                    'MZ-7G-LMND': 25, 'MZ-1G-CGRP': 25, 'MZ-1G-HMLN': 25, 'MZ-1G-LMND': 25, 'MZ-1G-STRP': 25,
-                    'MZ-1G-SWTM': 25, 'MZ-1G-WLDB': 25, 'MZ-7G-CGRP': 25, 'MZ-7G-HMLN': 25, 'MZ-7G-STRP': 25,
-                    'MZ-7G-SWTM': 25, 'MZ-7G-WLDB': 25, 'CHOC1000': 50, 'GUM400': 50,
+                    'MZ-7G-LMND': 50, 'MZ-1G-CGRP': 25, 'MZ-1G-HMLN': 25, 'MZ-1G-LMND': 25, 'MZ-1G-STRP': 25,
+                    'MZ-1G-SWTM': 25, 'MZ-1G-WLDB': 25, 'MZ-7G-CGRP': 50, 'MZ-7G-HMLN': 50, 'MZ-7G-STRP': 50,
+                    'MZ-7G-SWTM': 50, 'MZ-7G-WLDB': 50, 'CHOC1000': 50, 'GUM400': 50,
                     'CHOC400': 50, 'GUM100-CFX-FOCUS': 50, 'GUM100-CFX-SLEEP': 50,
                     'PFWR-1': 50, 'GUM1000': 50, 'LVO-CART-.5': 50, 'PURET-TERP-500': 50,
-                    'TRD-HASH': 50, 'HVG-6-SEEDPACK': 10, 'GUM5-CFX-20:1-P': 50, 'GUM-HR-100': 50, 'GUM100-CFX-20:1': 50}
+                    'TRD-HASH': 50, 'HVG-6-SEEDPACK': 10, 'GUM5-CFX-20:1-P': 50, 'GUM-HR-100': 50, 'GUM100-CFX-20:1': 50, 'GUM100-CFX-RELIEF': 50}
 
 servings = {'PR1': ' ', 'PR1-KIEF': ' ', 'PRT-7': ' ', 'LVO-CART-1': ' ', 'HM-DSP-LVO-.5G': ' ',
                     'HM-DSP-LVO-1G': ' ', 'GUM100-CFX-ENERGY': 20, 'REMT-1:1-250': ' ',
@@ -103,7 +103,7 @@ servings = {'PR1': ' ', 'PR1-KIEF': ' ', 'PRT-7': ' ', 'LVO-CART-1': ' ', 'HM-DS
                     'MZ-7G-SWTM': ' ', 'MZ-7G-WLDB': ' ', 'CHOC1000': 20, 'GUM400': 20,
                     'CHOC400': 20, 'GUM100-CFX-FOCUS': 20, 'GUM100-CFX-SLEEP': 20,
                     'PFWR-1': ' ', 'GUM1000': 20, 'LVO-CART-.5': ' ', 'PURET-TERP-500': ' ',
-                    'TRD-HASH': ' ', 'HVG-6-SEEDPACK': 6, 'GUM5-CFX-20:1-P': 20, 'GUM-HR-100': 10, 'GUM100-CFX-20:1': 20}
+                    'TRD-HASH': ' ', 'HVG-6-SEEDPACK': 6, 'GUM5-CFX-20:1-P': 20, 'GUM-HR-100': 10, 'GUM100-CFX-20:1': 20, 'GUM100-CFX-RELIEF': 20}
 
 cfx_gum_map = {'Berries & Cream': 'Calm - Berries & Cream', 'Lemon Lime': 'Energy - Lemon Lime',
                'Tropical Punch': 'Focus - Tropical Punch', 'Grape': 'Sleep - Grape', 'Blueberry': 'Sleep - Blueberry', 'Watermelon': 'Watermelon'}
@@ -119,7 +119,8 @@ prod_desc_with_no_batch_val = ['Pure Tincture - THC - 500MG', 'Pure Terpene-Infu
                                'CuratedFX Stir Stix - 50mg THC', 'Gummies Curated FX - CALM - 100mg THC', 'Gummies Curated FX - ENERGY - 100mg THC',
                                'Gummies Curated FX - FOCUS - 100mg THC', 'Gummies Curated FX - SLEEP - 100mg THC', 'Gummies Curated FX - 20:1 CBD:THC - 100mg THC',
                                'Gummies - Rapid Onset - 100mg THC', 'Fruit Drops - 100mg THC', 'Gummies - Hash Rosin - 100mg THC', 'Gummies 100mg THC',
-                               'Chocolate 100mg THC', 'Gummies 1000mg THC', 'Gummies 400mg THC', 'Chocolate 400mg THC', 'Chocolate 1000mg THC', 'Pre-Roll "Variety" 5-Pack 2.5g', 'Pre-Roll 5-Pack 5g']
+                               'Chocolate 100mg THC', 'Gummies 1000mg THC', 'Gummies 400mg THC', 'Chocolate 400mg THC', 'Chocolate 1000mg THC', 'Pre-Roll "Variety" 5-Pack 2.5g', 'Pre-Roll 5-Pack 5g',
+                               'Gummies Curated FX - RELIEF - 100mg THC']
 
 # FORMAT EXAMPLE - DO NOT DELETE THIS
 # value_pricing = {('FLWR-3.5-PLUS', 'Lime Wreck Haze'): '$5.00',

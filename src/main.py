@@ -19,7 +19,7 @@ logo_file_name = 'hv_logo_sized_201_53.png'
 tmp_xlsx_name = 'Wholesale_Order_Form.xlsx'
 sheet_name = 'HVVWSGoodsOrderingSheet'
 ws_order_form_name = f'Wholesale_Order_Form_{date_for_file}.xlsx'
-strain_no_sale_list = ['DX4', 'Larry Berry', 'Black Magic']
+strain_no_sale_list = ['DX4', 'Larry Berry', 'Black Magic', 'Chocolate Pie']
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 tmp_path = os.path.abspath(os.path.join(script_dir, '..', 'tmp'))
@@ -142,6 +142,9 @@ final_df = move_qty_col_added_df[move_qty_col_added_df['Qty. Available'].notna()
 # add columns not in df already (NET WEIGHTS/VOLUMES, SERVINGS, etc.)
 add_columns_df = dfuns.add_columns(final_df)
 
+# sort alphabetically by strain within each category
+add_columns_df = add_columns_df.sort_values(by=['Inventory ID', 'Strain/Flavor'], ascending=[True, True])
+
 # add product descriptor row to separate items (e.g. flower from pre-rolls from hitmakers and so on)
 starting_row_cat_insert_df = dfuns.insert_start_row(add_columns_df, cs.cat_by_inventory_id)
 
@@ -197,7 +200,7 @@ sheet.freeze_panes = 'A8'
 new_workbook.save(ws_order_form_output)
 
 # email the output form
-gwa.send_email(ws_order_form_output)
+# gwa.send_email(ws_order_form_output)
 
 # clean up tmp files
 funs.delete_files_from_directory(tmp_path)
