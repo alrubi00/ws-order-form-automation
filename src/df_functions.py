@@ -37,9 +37,7 @@ def remove_row_with_zero_qty(df, col):
 # because that function accounts for nulls or ''
 # the only current use case is to remove reserved strains for
 # specific customers that shouldn't be available for wholesale
-# def remove_row_with_val_in_col(df, col, val):
-#     df = df[df[f'{col}'] != val]
-#     return df
+
 def remove_row_with_val_in_col(df, col, vals):
     filtered_df = df[~df[col].isin(vals)]
     return filtered_df
@@ -47,8 +45,13 @@ def remove_row_with_val_in_col(df, col, vals):
 # currently in acu the cfx gummy naming doesn't generally combine the flavor
 # with it's effect (sleep, focus, etc.) so it's done here leveraging a hardcoded map
 def update_cfx_gummies_description(df):
-    df['Strain/Flavor'] = df['Strain/Flavor'].map(cs.cfx_gum_map).fillna(df['Strain/Flavor'])
+    def map_flavor(row):
+        key = (row['Inventory ID'], row['Strain/Flavor'])
+        return cs.cfx_gum_map.get(key, row['Strain/Flavor'])
+
+    df['Strain/Flavor'] = df.apply(map_flavor, axis=1)
     return df
+
 
 # this will update the value in a column based on the represented valuesin a dictionary
 def add_value_to_col_based_on_other_col(df, col_to_fill, map, based_on_col):
@@ -106,46 +109,6 @@ def merge_dfs(df1, df2, df3):
                 merged_df.drop(columns=['Total THC_df3'], inplace=True)
 
     return merged_df
-
-# def merge_dfs(df1, df2, df3):
-#     merge_keys = ["Inventory ID", "Product Description", "Strain"]
-#     cols_to_merge = ['Total THC', 'THCA', 'Total Terpenes', 'TAC', 'Harvest Date']
-
-#     # Merge df2 into df1
-#     merged_df = pd.merge(
-#         df1,
-#         df2[merge_keys + cols_to_merge],
-#         on=merge_keys,
-#         how='left'
-#     )
-
-#     # Get rows from df3 with the lowest 'Total THC' per group
-#     df3_min_thc = df3.loc[
-#         df3.groupby(merge_keys)['Total THC'].idxmin()
-#     ][merge_keys + cols_to_merge]
-
-#     # Merge in df3 (minimal THC rows)
-#     merged_df = pd.merge(
-#         merged_df,
-#         df3_min_thc,
-#         on=merge_keys,
-#         how='left',
-#         suffixes=('', '_df3')
-#     )
-
-#     # Keep the lowest 'Total THC' value
-#     merged_df['Total THC'] = merged_df[['Total THC', 'Total THC_df3']].min(axis=1)
-
-#     # For the other columns, fill in missing values from df3 if available
-#     for col in ['THCA', 'Total Terpenes', 'TAC', 'Harvest Date']:
-#         df3_col = f"{col}_df3"
-#         merged_df[col] = merged_df[col].combine_first(merged_df[df3_col])
-#         merged_df.drop(columns=[df3_col], inplace=True)
-
-#     # Drop the auxiliary 'Total THC_df3' column
-#     merged_df.drop(columns=['Total THC_df3'], inplace=True)
-
-#     return merged_df
 
 # hardcoded drop of columns found in download
 def remove_columns(df):
