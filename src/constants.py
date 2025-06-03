@@ -46,7 +46,7 @@ cat_by_inventory_id = {'PR1': 'PRE-ROLLS 1g', 'PR1-KIEF': 'PRE-ROLLS 1g - KIEF',
                     'GUM-HR-100': 'Hash Rosin Gummies - 100mg THC', 'GUM-HR-50': 'Hash Rosin Gummies', 'GUM100-CFX-20:1':'CuratedFX Gummies - Rapid Onset - 100mg THC',
                     'GUM100-CFX-RELIEF': 'CuratedFX Gummies - Rapid Onset - 100mg THC', 'PR2-.5-3PMZ': 'muze - 1g (2x .5g) pre-rolls'}
 
-price_ea = {'PR1': '$5.00', 'PR1-KIEF': '$5.00', 'PRT-7': '$20.00', 'LVO-CART-1': '$16.00', 'HM-DSP-LVO-.5G': '$11.00',
+price_ea = {'PR1': '$5.00', 'PR1-KIEF': '$5.00', 'PRT-7': '$20.00', 'LVO-CART-1': '$15.00', 'HM-DSP-LVO-.5G': '$10.00',
                     'HM-DSP-LVO-1G': '$17.50', 'GUM100-CFX-ENERGY': '$12.50', 'REMT-1:1-250': '$20.00',
                     'GUM100-RAPID': '$10.00', 'GUM100': '$7.00', 'CHOC100': '$10.00', 'SS-50': '$5.00',
                     'CFX-SS-50': '$6.00', 'FD100': '$7.00', 'GUM100-CFX-CALM': '$12.50',
@@ -140,8 +140,8 @@ prod_desc_with_no_batch_val = ['Pure Tincture - THC - 500MG', 'Pure Terpene-Infu
 
 value_pricing = {('HM-DSP-LVO-1G', 'CuratedFX - Sleep'): '$15.00',
                  ('HM-DSP-LVO-1G', 'CuratedFX - Calm'): '$15.00',
-                 ('HM-DSP-LVO-.5G', 'CuratedFX - Calm'): '$9.00',
-                ('HM-DSP-LVO-.5G', 'CuratedFX - Sleep'): '$9.00',
+                 ('HM-DSP-LVO-.5G', 'CuratedFX - Calm'): '$8.00',
+                ('HM-DSP-LVO-.5G', 'CuratedFX - Sleep'): '$8.00',
                 ('LVO-CART-.5', 'CuratedFX - Sleep'): '$8.00',
                 ('LVO-CART-.5', 'CuratedFX - Calm'): '$8.00',
                 ('LVO-CART-1', 'CuratedFX - Sleep'): '$12.50',
