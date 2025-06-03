@@ -19,7 +19,7 @@ logo_file_name = 'hv_logo_sized_201_53.png'
 tmp_xlsx_name = 'Wholesale_Order_Form.xlsx'
 sheet_name = 'HVVWSGoodsOrderingSheet'
 ws_order_form_name = f'Wholesale_Order_Form_{date_for_file}.xlsx'
-strain_no_sale_list = ['DX4', 'Larry Berry', 'Black Magic', 'Chocolate Pie']
+strain_no_sale_list = ['DX4', 'Larry Berry', 'Black Magic', 'Chocolate Pie', 'Dosidos']
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 tmp_path = os.path.abspath(os.path.join(script_dir, '..', 'tmp'))
@@ -200,7 +200,7 @@ sheet.freeze_panes = 'A8'
 new_workbook.save(ws_order_form_output)
 
 # email the output form
-# gwa.send_email(ws_order_form_output)
+gwa.send_email(ws_order_form_output)
 
 # clean up tmp files
 funs.delete_files_from_directory(tmp_path)
