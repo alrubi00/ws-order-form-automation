@@ -163,11 +163,14 @@ sheet = new_workbook[sheet_name]
 xfuns.grey_headers(sheet)
 xfuns.delete_dupe_red_rows(sheet)
 xfuns.update_cat_white(sheet)
-xfuns.convert_float_percentage(sheet)
+
 xfuns.adjust_column_width(sheet)
 xfuns.center_align_columns(sheet)
 xfuns.update_value_pricing_bg(sheet)
 xfuns.remove_zeros(sheet)
+
+xfuns.convert_float_percentage(sheet)
+
 xfuns.available_case(sheet)
 xfuns.convert_currency(sheet, 'L')
 xfuns.case_price(sheet)

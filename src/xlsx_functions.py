@@ -165,13 +165,27 @@ def add_total_sum(sheet, last_total_row):
     total_text_cell.font = black_bold_font
 
 # convert float values to %
-def convert_float_percentage(sheet):
-    for row in sheet:
-        for cell in row:
-            if isinstance(cell.value, float):
-                cell.value = cell.value / 100
-                cell.number_format = '0.0%'
+# def convert_float_percentage(sheet):
+#     for row in sheet:
+#         for cell in row:
+#             if isinstance(cell.value, float):
+#                 cell.value = cell.value / 100
+#                 cell.number_format = '0.0%'
 
+def convert_float_percentage(sheet):
+    header_row_idx = 7
+    headers = [cell.value for cell in sheet[header_row_idx]]
+    target_columns = {'THC-A', 'Total THC', 'Total Terpenes', 'TAC'}
+
+    for row in sheet.iter_rows(min_row=header_row_idx + 1):  # start from row 8
+        for cell in row:
+            col_idx = cell.col_idx - 1  # 0-based index
+            if col_idx < len(headers) and headers[col_idx] in target_columns:
+                if isinstance(cell.value, float):
+                    cell.value = cell.value / 100
+                    cell.number_format = '0.0%'
+                elif isinstance(cell.value, int):
+                    cell.value = f'{cell.value}.0%'
 
 # when insert_start_row in df_functions runs it creates several duplicate
 # separator rows - this cleans that up - also cleans up purple and green dupe instances
