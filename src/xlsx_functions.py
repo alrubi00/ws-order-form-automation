@@ -350,3 +350,71 @@ def update_color_in_column(sheet, column, color):
         cell = row[0]
         if cell.value is not None:
             cell.fill = fill_color
+
+# determines the row size of each category by using the category header row bg colors as start/stop points
+# then drops the sum formula in the last row of the product category to be used in volume_pricing_ea_column
+# returning the pd_cell_dictionary dictionary that assigns the total sum cell in column U
+# to each product description. this dictionary will be passed to volume_pricing_ea_column for building the 
+# volume pricing formula 
+def insert_section_sums(sheet, last_row):
+
+    pd_cell_dictionary = {}
+    header_colors = {"00D60000", "0000B050", "007030A0",
+                     "FFD60000", "FF00B050", "FF7030A0"}
+    col_b = 2  # product description
+    col_c = 3  # technically the strain column but leveraging for checking if header row
+    col_q = 17  # order qty case - to build the sum formula going in U column
+    col_u = 21  # to be hidden column with the sum total formula for each product category
+
+    section_start = None
+
+    for row in range(7, last_row + 1):
+        cell = sheet.cell(row = row, column = col_c)
+        pd_cell = sheet.cell(row = row - 1, column = col_b)
+        fill = cell.fill
+
+        # check for red-green-purple section row
+        is_section_header = (
+            fill and fill.fill_type == 'solid' and fill.start_color
+            and fill.start_color.rgb in header_colors
+        )
+
+        if is_section_header:
+            if section_start is not None:
+                section_end = row - 1
+                if section_end >= section_start:
+                    sum_cell = sheet.cell(row=section_end, column=col_u)
+                    sum_cell.value = f"=SUM({get_column_letter(col_q)}{section_start}:{get_column_letter(col_q)}{section_end})"
+                    pd_cell_dictionary[pd_cell.value] = sum_cell.coordinate
+            section_start = row + 1
+
+    return pd_cell_dictionary
+
+# builds volume pricing formula that's dropped in column T
+# and updates the Total column (R) to look for volume pricing
+def volume_pricing_ea_column(sheet, dict):
+    vol_price_dict = cs.volume_pricing
+    val_price_dict = cs.value_pricing
+
+    for row in range(8, sheet.max_row + 1):
+        prod_desc = sheet[f'B{row}'].value
+        strain = sheet[f'C{row}'].value
+        key_tuple = (prod_desc, strain)
+        volume_price = sheet[f'L{row}']
+
+        for key, val in vol_price_dict.items():
+            if prod_desc == key and key_tuple not in val_price_dict:
+                total_cell = dict.get(key)
+                # vol_price_ea = f'=IF({total_cell}>=10, {val}, L{row}*M{row})'
+                vol_price_ea = f'=IF({total_cell}>=10, {val}, T{row})'
+                volume_price.value = vol_price_ea
+
+
+def dupe_column(sheet, source_column, destination_column):
+
+    max_row = sheet.max_row
+
+    for row in range(8, max_row + 1):
+        source_cell = sheet[f"{source_column}{row}"]
+        destination_cell = sheet[f"{destination_column}{row}"]
+        destination_cell.value = source_cell.value

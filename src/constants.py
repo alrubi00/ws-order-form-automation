@@ -138,18 +138,30 @@ prod_desc_with_no_batch_val = ['Pure Tincture - THC - 500MG', 'Pure Terpene-Infu
 #                  ('HM-DSP-LVO-1G', 'Purple Paradox'): '$14.00',
 #                 ('CHOC100', 'Milk'): '$600.00'}
 
-value_pricing = {('HM-DSP-LVO-1G', 'CuratedFX - Sleep'): '$15.00',
-                 ('HM-DSP-LVO-1G', 'CuratedFX - Calm'): '$15.00',
-                 ('HM-DSP-LVO-.5G', 'CuratedFX - Calm'): '$8.00',
-                ('HM-DSP-LVO-.5G', 'CuratedFX - Sleep'): '$8.00',
-                ('LVO-CART-.5', 'CuratedFX - Sleep'): '$8.00',
-                ('LVO-CART-.5', 'CuratedFX - Calm'): '$8.00',
-                ('LVO-CART-1', 'CuratedFX - Sleep'): '$12.50',
-                ('LVO-CART-1', 'CuratedFX - Calm'): '$12.50'}
+# value_pricing = {('HM-DSP-LVO-1G', 'CuratedFX - Sleep'): '$15.00',
+#                  ('HM-DSP-LVO-1G', 'CuratedFX - Calm'): '$15.00',
+#                  ('HM-DSP-LVO-.5G', 'CuratedFX - Calm'): '$8.00',
+#                 ('HM-DSP-LVO-.5G', 'CuratedFX - Sleep'): '$8.00',
+#                 ('LVO-CART-.5', 'CuratedFX - Sleep'): '$8.00',
+#                 ('LVO-CART-.5', 'CuratedFX - Calm'): '$8.00',
+#                 ('LVO-CART-1', 'CuratedFX - Sleep'): '$12.50',
+#                 ('LVO-CART-1', 'CuratedFX - Calm'): '$12.50'}
 
+# the dictionary is as follows:
+# (Product Description, Strain/Flavor: Value Price)
+value_pricing = {('Hitmaker Disposable Vape 1g', 'CuratedFX - Sleep'): '$15.00',
+                 ('Hitmaker Disposable Vape 1g', 'CuratedFX - Calm'): '$15.00',
+                 ('Hitmaker Disposable Vape .5g', 'CuratedFX - Calm'): '$8.00',
+                ('Hitmaker Disposable Vape .5g', 'CuratedFX - Sleep'): '$8.00',
+                ('Live Vape Oil Cartridge .5g', 'CuratedFX - Sleep'): '$8.00',
+                ('Live Vape Oil Cartridge .5g', 'CuratedFX - Calm'): '$8.00',
+                ('Live Vape Oil Cartridge 1g', 'CuratedFX - Sleep'): '$12.50',
+                ('Live Vape Oil Cartridge 1g', 'CuratedFX - Calm'): '$12.50'}
+
+# when NO value pricing - uncomment this out and comment out the dictionary above
 # value_pricing = {}
 
-volume_pricing = {'FLWR-3.5-PLUS': 'Purchase 10+ cases get all for $15/ unit *Excludes Head Stash*',
+volume_pricing_ad = {'FLWR-3.5-PLUS': 'Purchase 10+ cases get all for $15/ unit *Excludes Head Stash*',
                   'PRT-7': '10+ cases get $17.50 per unit',
                   'HM-DSP-LVO-1G': '10+ Cases of Vape gets $1 off per unit',
                   'HM-DSP-LVO-.5G': '10+ Cases of Vape gets $1 off per unit',
@@ -159,3 +171,14 @@ volume_pricing = {'FLWR-3.5-PLUS': 'Purchase 10+ cases get all for $15/ unit *Ex
                   'GUM100': '10+ Cases of Gummies gets $2 off per unit',
                   'GUM-HR-100': '10+ Cases of Gummies gets $2 off per unit',
                   'FD100': '10+ Cases of Fruit Drops gets $2 off per unit'}
+
+volume_pricing = {'Flower Jar 3.5g (+)': '15.00',
+                  'Pre-Roll 7-Pack 3.5g': '17.50',
+                  'Hitmaker Disposable Vape 1g': '16.50',
+                  'Hitmaker Disposable Vape .5g': '9.00',
+                  'Live Vape Oil Cartridge 1g': '14.00',
+                  'Live Vape Oil Cartridge .5g': '9.00',
+                  'Gummies - Rapid Onset - 100mg THC': '8.00',
+                  'Gummies 100mg THC': '5.00',
+                  'Gummies - Hash Rosin - 100mg THC': '10.50',
+                  'Fruit Drops - 100mg THC': '5.00'}

@@ -26,18 +26,29 @@ def join_dir_file(dir, file):
     file_path = os.path.join(os.path.dirname(__file__), dir, file)
     return file_path
 
-def login_generate_download_report_df(path, date_for_file, report_id):
+def login_generate_download_report_df(report_id):
     start_session = acu.login()
     download_file = acu.generate_download_report(start_session, report_id)
-    end_session = acu.close_acumatica_session(start_session)
-    file_path = join_dir_file(path, f'{report_id}-cleaned-{date_for_file}.xlsx')
-    clean_file = xfuns.clean_excel_file(download_file, file_path)
-    df = pd.read_excel(clean_file)
+    acu.close_acumatica_session(start_session)
+    df = pd.read_excel(download_file, engine='calamine')
 
     if report_id == 'CLAEBAvailableNoGroup':
         df = dfuns.group_and_sort(df)
     
     return df
+
+# def login_generate_download_report_df(path, date_for_file, report_id):
+#     start_session = acu.login()
+#     download_file = acu.generate_download_report(start_session, report_id)
+#     end_session = acu.close_acumatica_session(start_session)
+#     file_path = join_dir_file(path, f'{report_id}-cleaned-{date_for_file}.xlsx')
+#     clean_file = xfuns.clean_excel_file(download_file, file_path)
+#     df = pd.read_excel(clean_file)
+
+#     if report_id == 'CLAEBAvailableNoGroup':
+#         df = dfuns.group_and_sort(df)
+    
+#     return df
 
 # can be any folder - but this was created with deleting the files in the tmp folder in mind
 # once the script is done with them they can be delete to clear space 
