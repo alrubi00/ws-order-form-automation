@@ -7,7 +7,7 @@ import warnings
 # updates current pricing with a value price point
 def value_pricing_update(row):
     update_dict = cs.value_pricing
-    key = (row['Inventory ID'], row['Strain/Flavor'])
+    key = (row['Product Description'], row['Strain/Flavor'])
     return update_dict.get(key, row['Price/EA'])
 
 # convert qtys that can fill at least one of their respective cases but there's a remainder

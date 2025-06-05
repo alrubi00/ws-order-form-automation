@@ -19,7 +19,7 @@ logo_file_name = 'hv_logo_sized_201_53.png'
 tmp_xlsx_name = 'Wholesale_Order_Form.xlsx'
 sheet_name = 'HVVWSGoodsOrderingSheet'
 ws_order_form_name = f'Wholesale_Order_Form_{date_for_file}.xlsx'
-strain_no_sale_list = ['DX4', 'Larry Berry', 'Black Magic', 'Chocolate Pie', 'Dosidos']
+strain_no_sale_list = ['DX4', 'Larry Berry', 'Black Magic', 'Chocolate Pie', 'Dosidos', 'Musk #1']
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 tmp_path = os.path.abspath(os.path.join(script_dir, '..', 'tmp'))
@@ -49,13 +49,13 @@ wb.save(file_name)
 # df_in_transit - WS040725 - In-Transit Inventory - INTRANSITINV
 
 # create dataframe for - WS040725 - In-Transit Inventory - INTRANSITINV
-df_in_transit = funs.login_generate_download_report_df(tmp_path, date_for_file, 'INTRANSITINV')
+df_in_transit = funs.login_generate_download_report_df('INTRANSITINV')
 
 # create dataframe for WS050925 - FGA Wholesale With Batch Info No Group or Sort - CLAEBAvailableNoGroup
-df_batch_grouped = funs.login_generate_download_report_df(tmp_path, date_for_file, 'CLAEBAvailableNoGroup')
+df_batch_grouped = funs.login_generate_download_report_df('CLAEBAvailableNoGroup')
 
 # create dataframe for WS040125 - FGA Wholesale With Valid Qty - FGAWSOF
-df_qty = funs.login_generate_download_report_df(tmp_path, date_for_file, 'FGAWSOF')
+df_qty = funs.login_generate_download_report_df('FGAWSOF')
 
 # now start building dataframe 
 main_df = dfuns.merge_dfs(df_qty, df_batch_grouped, df_in_transit)
@@ -100,7 +100,7 @@ serve_col_added_df = dfuns.add_col_with_vals_from_dict(net_col_added_df, 'Invent
 price_col_added_df = dfuns.add_col_with_vals_from_dict(serve_col_added_df, 'Inventory ID', cs.price_ea, 'Price/EA')
 
 # add volume pricing
-price_col_added_df = dfuns.add_col_with_vals_from_dict(price_col_added_df, 'Inventory ID', cs.volume_pricing, ' ')
+price_col_added_df = dfuns.add_col_with_vals_from_dict(price_col_added_df, 'Inventory ID', cs.volume_pricing_ad, ' ')
 
 # this accomodates when the wholesale team wants a product to be on sale or have value pricing
 price_col_added_df['Price/EA'] = price_col_added_df.apply(dfuns.value_pricing_update, axis=1)
@@ -163,14 +163,11 @@ sheet = new_workbook[sheet_name]
 xfuns.grey_headers(sheet)
 xfuns.delete_dupe_red_rows(sheet)
 xfuns.update_cat_white(sheet)
-
 xfuns.adjust_column_width(sheet)
 xfuns.center_align_columns(sheet)
 xfuns.update_value_pricing_bg(sheet)
 xfuns.remove_zeros(sheet)
-
 xfuns.convert_float_percentage(sheet)
-
 xfuns.available_case(sheet)
 xfuns.convert_currency(sheet, 'L')
 xfuns.case_price(sheet)
@@ -181,6 +178,9 @@ xfuns.add_borders(sheet, last_total_row)
 xfuns.grey_out_cells(sheet, last_total_row)
 xfuns.add_separator_row(sheet)
 xfuns.add_total_sum(sheet, last_total_row)
+pd_sum_cell_dictionary = xfuns.insert_section_sums(sheet, last_total_row)
+xfuns.dupe_column(sheet, 'L', 'T')
+xfuns.volume_pricing_ea_column(sheet, pd_sum_cell_dictionary)
 xfuns.merge_cells_in_column(sheet, 'B', 9)
 xfuns.convert_currency(sheet, 'R')
 xfuns.update_color_in_column(sheet, 'S', 'FCE4D6')
@@ -193,6 +193,8 @@ sheet.column_dimensions['S'].width = 27
 xfuns.word_wrap_column(sheet, 'S')
 xfuns.remove_border(sheet)
 sheet.column_dimensions['B'].hidden = True
+sheet.column_dimensions['T'].hidden = True
+sheet.column_dimensions['U'].hidden = True
 xfuns.create_header(sheet)
 sheet.sheet_view.zoomScale = 75
 

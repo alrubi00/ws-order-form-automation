@@ -7,7 +7,6 @@ import os
 from datetime import datetime
 
 
-# def send_email(subject, body, sender, password, recipients, attachment_path):
 def send_email(file_path):
 
     try:
@@ -18,6 +17,7 @@ def send_email(file_path):
         sender = 'happyvalleybiteam@gmail.com'
         password = 'yuom ejkm rjpy zany'
         attachment = file_path
+        
         recipients = [
         "alan.rubin@happyvalley.org",
         "kai.earthsong@happyvalley.org",
@@ -60,30 +60,3 @@ def send_email(file_path):
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 
-# send_email()
-# send_email(subject, body, sender, password, recipients, attachment_path)
-
-
-
-# import smtplib
-# from email.mime.text import MIMEText
-
-# subject = 'Correction...'
-# body = '...'
-# sender = 'alrubi13@gmail.com'
-# password = 'pimu cuol xhxn fmuw'
-# recipients = 'alanrubin00@yahoo.com'
-
-# def send_email(subject, body, sender, password, recipients):
-#     msg = MIMEText(body)
-#     msg['Subject'] = subject
-#     msg['From'] = sender
-#     msg['To'] = recipients
-
-#     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_server:
-#         smtp_server.login(sender, password)
-#         smtp_server.sendmail(sender, recipients, msg.as_string())
-#     print('Message sent!')
-
-
-# send_email(subject, body, sender, password, recipients)
