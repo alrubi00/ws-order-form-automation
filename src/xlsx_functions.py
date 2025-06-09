@@ -1,8 +1,9 @@
 import openpyxl
 from openpyxl import load_workbook
-from openpyxl.styles import Border, Side, PatternFill
+from openpyxl.utils import get_column_letter
 from openpyxl.utils import range_boundaries
 from openpyxl.utils import get_column_letter
+from openpyxl.styles import Border, Side, PatternFill
 from openpyxl.styles import Alignment
 from openpyxl.styles import NamedStyle
 from openpyxl.styles import Font
@@ -12,6 +13,7 @@ import pandas as pd
 import os
 import constants as cs
 import time
+
 
 # value pricing is added to the dataframe during dataframe transformation.
 # but we want to call it out visually in the xlsx form with a yellow highlight
@@ -164,14 +166,6 @@ def add_total_sum(sheet, last_total_row):
     total_text_cell.value = 'ORDER TOTAL'
     total_text_cell.font = black_bold_font
 
-# convert float values to %
-# def convert_float_percentage(sheet):
-#     for row in sheet:
-#         for cell in row:
-#             if isinstance(cell.value, float):
-#                 cell.value = cell.value / 100
-#                 cell.number_format = '0.0%'
-
 def convert_float_percentage(sheet):
     header_row_idx = 7
     headers = [cell.value for cell in sheet[header_row_idx]]
@@ -213,10 +207,12 @@ def grey_headers(sheet):
     cell_range = 'B7:R7'
     grey_hex = 'BABABA'
     grey_fill = PatternFill(start_color=grey_hex, end_color=grey_hex, fill_type='solid')
+    black_bold_font = Font(name='Calibri', size=11, bold=True, italic=False, color='000000')
     
     for row in sheet[cell_range]:
         for cell in row:
             cell.fill = grey_fill
+            cell.font = black_bold_font
 
     return sheet
 

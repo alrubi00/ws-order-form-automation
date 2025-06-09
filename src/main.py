@@ -4,8 +4,8 @@ import df_functions as dfuns
 import xlsx_functions as xfuns
 import functions as funs
 import acumatica as acu
-# import email_w_attach as ewa
-import gmail_w_attach as gwa
+import sharepoint as sp
+import email_w_attach as ewa
 from openpyxl import Workbook
 from openpyxl.drawing.image import Image
 from datetime import datetime
@@ -14,7 +14,6 @@ import os
 
 today = datetime.now()
 date_for_file = today.strftime('%m%d%Y%H%M%S')
-# img_path = '../img'
 logo_file_name = 'hv_logo_sized_201_53.png'
 tmp_xlsx_name = 'Wholesale_Order_Form.xlsx'
 sheet_name = 'HVVWSGoodsOrderingSheet'
@@ -42,8 +41,16 @@ ws.add_image(img, 'C2')
 ws.title = sheet_name
 wb.save(file_name)
 
-# aside from making the login/logout call, below makes 3 calls to generate each report
-# and 3 calls download the report in xlsx format
+######################
+## EXTRACTION START ##
+######################
+
+# login
+# 3 calls to generate each report
+# 3 subsequent calls to download the generated report in xlsx format
+# logout
+
+# RESOURCES DOWNLOADED 
 # df_batch - WS050925 - FGA Wholesale With Batch Info No Group or Sort - CLAEBAvailableNoGroup
 # df_qty -  WS040125 - FGA Wholesale With Valid Qty - FGAWSOF
 # df_in_transit - WS040725 - In-Transit Inventory - INTRANSITINV
@@ -57,6 +64,14 @@ df_batch_grouped = funs.login_generate_download_report_df('CLAEBAvailableNoGroup
 # create dataframe for WS040125 - FGA Wholesale With Valid Qty - FGAWSOF
 df_qty = funs.login_generate_download_report_df('FGAWSOF')
 
+####################
+## EXTRACTION END ##
+####################
+
+####################################
+## DATAFRAME TRANSFORMATION START ##
+####################################
+
 # now start building dataframe 
 main_df = dfuns.merge_dfs(df_qty, df_batch_grouped, df_in_transit)
 
@@ -66,7 +81,7 @@ main_df = dfuns.drop_dupe_rows(main_df)
 # remove row if product has 0 for quantity
 main_df = dfuns.remove_row_with_zero_qty(main_df, 'Qty Available for Sale')
 
-# remove the strain DX4 (not for general whoesale)
+# remove the strains not for general whoesale
 main_df = dfuns.remove_row_with_val_in_col(main_df, 'Strain', strain_no_sale_list)
 
 # sort by Inventory ID and in specified order
@@ -86,7 +101,6 @@ cleaned_cols_df = sorted_df.rename(columns={'Strain': 'Strain/Flavor', 'THCA': '
 
 ## the next 4 steps add coluns to the df from hardcoded dictionaries
 ## this accomodates values that either aren't in acumatica or are really tough to get out acu
- 
 # add column with I/S/H value
 ish_col_added_df = dfuns.add_col_with_vals_from_dict(cleaned_cols_df, 'Strain/Flavor', cs.ish_dict, 'I/S/H')
 
@@ -151,9 +165,18 @@ starting_row_cat_insert_df = dfuns.insert_start_row(add_columns_df, cs.cat_by_in
 # now we can remove the inventory id column - no longer needed
 starting_row_cat_insert_df.pop('Inventory ID')
 
+####################################
+## DATAFRAME TRANSFORMATION END ##
+####################################
+
 # write the finished dataframe to the excel file
 with pd.ExcelWriter(file_name, engine='openpyxl', mode='a', if_sheet_exists='overlay') as writer:
     starting_row_cat_insert_df.to_excel(writer, sheet_name=sheet_name, startrow=6, startcol=1, index=False)
+
+
+###############################
+## XLSX TRANSFORMATION START ##
+###############################
 
 # start a new workbook for the remaining formatting
 new_workbook = load_workbook(file_name)
@@ -204,8 +227,24 @@ sheet.freeze_panes = 'A8'
 # new_workbook.save(f'../data/Wholesale_Order_Form_{date_for_file}.xlsx')
 new_workbook.save(ws_order_form_output)
 
+#############################
+## XLSX TRANSFORMATION END ##
+#############################
+
+#######################################
+## EMAIL FORM/ADD FORM TO SHAREPOINT ##
+#######################################
+
+# add form to sharepoint
+link_to_file_on_sp = sp.add_form_to_sharepoint(ws_order_form_output)
+
 # email the output form
-gwa.send_email(ws_order_form_output)
+# gwa.send_email(ws_order_form_output)
+ewa.email_form_w_link(ws_order_form_output, link_to_file_on_sp)
+
+##############
+## CLEAN UP ##
+##############
 
 # clean up tmp files
 funs.delete_files_from_directory(tmp_path)

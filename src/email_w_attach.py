@@ -1,88 +1,86 @@
 import requests
+import msal
 import base64
-from datetime import datetime
 import os
 import yaml
-from dotenv import load_dotenv
+from datetime import datetime
 
-# config_path = os.path.join(os.path.dirname(__file__), '../config', 'config.yaml')
-# with open(config_path, 'r') as file:
-#     data = yaml.safe_load(file)
+config_path = os.path.join(os.path.dirname(__file__), '../config', 'config.yaml')
+with open(config_path, 'r') as file:
+    data = yaml.safe_load(file)
 
-today = datetime.now()
-date_for_file = today.strftime('%m%d%Y%H%M%S')
+def email_form_w_link(file_path, link_to_file_on_sp):
+    today = datetime.now()
+    date = today.strftime('%m/%d/%Y - %H:%M')
+    client_id = data['ms_c_id']
+    client_secret = data['ms_c_s']
+    tenant_id = data['ms_tnt_id']
 
-def send_email(file):
+    from_email = "donotreply@happyvalley.org"
+    to_email = [
+        "alan.rubin@happyvalley.org",
+        "kai.earthsong@happyvalley.org",
+        "ellida.cornavaca@happyvalley.org",
+        "jeremy.nestor@happyvalley.org",
+        "gilly.motta@happyvalley.org",
+        "heather.lovett@happyvalley.org",
+        "shannon.oliver@happyvalley.org"
+            ]
+    # to_email = ["alan.rubin@happyvalley.org"]
+    subject = f'Happy Valley Wholesale Order Form {date}'
+    
+    body = f'''<p>Please find the attached Wholesale Order Form - {date}.</p>
+            <p>NOTE: Enable Editing once opened.</p>
+            <p>You can also <a href="{link_to_file_on_sp}">view it on SharePoint</a>.</p>'''
 
-    load_dotenv()
+    auth_url = f"https://login.microsoftonline.com/{tenant_id}"
+    scopes = ["https://graph.microsoft.com/.default"]
 
-    TENANT_ID = os.environ.get("TENANT_ID")
-    CLIENT_ID = os.environ.get("CLIENT_ID")
-    CLIENT_S = os.environ.get("CLIENT_S")
+    app = msal.ConfidentialClientApplication(
+        client_id,
+        authority=auth_url,
+        client_credential=client_secret
+    )
+    result = app.acquire_token_for_client(scopes=scopes)
+    if "access_token" not in result:
+        raise Exception(f"Token acquisition failed: {result.get('error_description')}")
 
-    AUTH_URL = f"https://login.microsoftonline.com/{TENANT_ID}/oauth2/v2.0/token"
+    access_token = result["access_token"]
 
+    with open(file_path, "rb") as f:
+        attachment_content = base64.b64encode(f.read()).decode()
 
-    data = {
-        "grant_type": "client_credentials",
-        "client_id": CLIENT_ID,
-        "client_secret": CLIENT_S,
-        "scope": "https://graph.microsoft.com/.default"
+    attachment_name = os.path.basename(file_path)
+    attachment = {
+        "@odata.type": "#microsoft.graph.fileAttachment",
+        "name": attachment_name,
+        "contentBytes": attachment_content
     }
 
-    # ws_order_form_name = f'Wholesale_Order_Form_{date_for_file}.xlsx'
-    # os.rename(file, ws_order_form_name)
+    # generate recipient list
+    recipients = [{"emailAddress": {"address": email}} for email in to_email]
 
-    with open(file, 'rb') as f:
-        excel_bytes = f.read()
+    message = {
+        "message": {
+            "subject": subject,
+            "body": {
+                "contentType": "HTML",
+                "content": body
+            },
+            "toRecipients": recipients,
+            "attachments": [attachment]
+        },
+        "saveToSentItems": "true"
+    }
 
-    excel_base64 = base64.b64encode(excel_bytes).decode('utf-8')
+    # send email with attachment
+    send_url = f"https://graph.microsoft.com/v1.0/users/{from_email}/sendMail"
+    response = requests.post(send_url, headers={
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json"
+    }, json=message)
 
-# Requesting the access token
-    response = requests.post(AUTH_URL, data=data)
-
-    # Check for errors in the token request
-    if response.status_code != 200:
-        print("Error fetching access token:", response.status_code, response.text)
+    if response.status_code == 202:
+        print("Email sent successfully.")
     else:
-        token = response.json().get("access_token")
-        # print("Access Token:", token)
-
-        headers = {
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json"
-        }
-
-        email_data = {
-            "message": {
-                "subject": "Google Review Removal Service Offer",
-                "body": {
-                    "contentType": "Text",
-                    "content": f'''Here's Johnny'''
-                },
-                "toRecipients": [
-                    {"emailAddress": {"address": "alan.rubin@happyvalley.org"}},
-                    {"emailAddress": {"address": "alanrubin00@yahoo.com"}}
-                ],
-                "attachments": [
-                    {
-                        "@odata.type": "#microsoft.graph.fileAttachment",
-                        "name": file,
-                        "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                        "contentBytes": excel_base64                    
-                    }
-                ]
-            }
-        }
-
-        response = requests.post(
-            "https://graph.microsoft.com/v1.0/users/alan.rubin@happyvalley.org/sendMail",
-            headers=headers,
-            json=email_data
-        )
-
-        # print(response.status_code, response.text)
-        print(response.status_code)
-
-# file = 'Book2.xlsx'
-# send_email(AUTH_URL, data, file)
+        print("Failed to send email:", response.status_code, response.text)
