@@ -37,19 +37,6 @@ def login_generate_download_report_df(report_id):
     
     return df
 
-# def login_generate_download_report_df(path, date_for_file, report_id):
-#     start_session = acu.login()
-#     download_file = acu.generate_download_report(start_session, report_id)
-#     end_session = acu.close_acumatica_session(start_session)
-#     file_path = join_dir_file(path, f'{report_id}-cleaned-{date_for_file}.xlsx')
-#     clean_file = xfuns.clean_excel_file(download_file, file_path)
-#     df = pd.read_excel(clean_file)
-
-#     if report_id == 'CLAEBAvailableNoGroup':
-#         df = dfuns.group_and_sort(df)
-    
-#     return df
-
 # can be any folder - but this was created with deleting the files in the tmp folder in mind
 # once the script is done with them they can be delete to clear space 
 def delete_files_from_directory(folder_path):
