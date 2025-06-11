@@ -20,6 +20,14 @@ sheet_name = 'HVVWSGoodsOrderingSheet'
 ws_order_form_name = f'Wholesale_Order_Form_{date_for_file}.xlsx'
 strain_no_sale_list = ['DX4', 'Larry Berry', 'Black Magic', 'Chocolate Pie', 'Dosidos', 'Musk #1']
 
+# top/tinc and cfx gummies sections need to have their F, G, and H columns
+# merged to accomodate the long cannabinoid breakdown string in column G
+# these strings drive the functions 
+top_tinc = 'TOPICAL/ TINCTURES'
+top_tinc_stop = 'Happy Valley Retail Seed Pack - 6 Seeds - Auto'
+cfx_gum = 'CuratedFX Gummies - Rapid Onset - 100mg THC'
+cfx_gum_stop = 'RAPID ONSET Gummies - 100mg THC'
+
 script_dir = os.path.dirname(os.path.abspath(__file__))
 tmp_path = os.path.abspath(os.path.join(script_dir, '..', 'tmp'))
 data_path = os.path.abspath(os.path.join(script_dir, '..', 'data'))
@@ -186,11 +194,16 @@ sheet = new_workbook[sheet_name]
 xfuns.grey_headers(sheet)
 xfuns.delete_dupe_red_rows(sheet)
 xfuns.update_cat_white(sheet)
+xfuns.remove_zeros(sheet)
+xfuns.convert_float_percentage(sheet)
+# drop merge functions here
+get_top_coords = xfuns.get_product_coordinates(sheet, top_tinc, top_tinc_stop)
+xfuns.merge_cbds_breakdown_cells(sheet, get_top_coords, top_tinc, top_tinc_stop)
+get_cfxgum_coords = xfuns.get_product_coordinates(sheet, cfx_gum, cfx_gum_stop)
+xfuns.merge_cbds_breakdown_cells(sheet, get_cfxgum_coords, cfx_gum, cfx_gum_stop)
 xfuns.adjust_column_width(sheet)
 xfuns.center_align_columns(sheet)
 xfuns.update_value_pricing_bg(sheet)
-xfuns.remove_zeros(sheet)
-xfuns.convert_float_percentage(sheet)
 xfuns.available_case(sheet)
 xfuns.convert_currency(sheet, 'L')
 xfuns.case_price(sheet)
@@ -213,6 +226,10 @@ xfuns.merge_cells_in_column(sheet, 'S', 9)
 sheet.column_dimensions['R'].width = 15
 # widening the Volume Pricing column to fit Volume Pricing messaging
 sheet.column_dimensions['S'].width = 27
+sheet.column_dimensions['E'].width = 16
+sheet.column_dimensions['F'].width = 16
+sheet.column_dimensions['G'].width = 16
+sheet.column_dimensions['H'].width = 16
 xfuns.word_wrap_column(sheet, 'S')
 xfuns.remove_border(sheet)
 sheet.column_dimensions['B'].hidden = True
@@ -236,11 +253,11 @@ new_workbook.save(ws_order_form_output)
 #######################################
 
 # add form to sharepoint
-link_to_file_on_sp = sp.add_form_to_sharepoint(ws_order_form_output)
+# link_to_file_on_sp = sp.add_form_to_sharepoint(ws_order_form_output)
 
 # email the output form
 # gwa.send_email(ws_order_form_output)
-ewa.email_form_w_link(ws_order_form_output, link_to_file_on_sp)
+# ewa.email_form_w_link(ws_order_form_output, link_to_file_on_sp)
 
 ##############
 ## CLEAN UP ##

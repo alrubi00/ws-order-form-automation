@@ -401,7 +401,6 @@ def volume_pricing_ea_column(sheet, dict):
         for key, val in vol_price_dict.items():
             if prod_desc == key and key_tuple not in val_price_dict:
                 total_cell = dict.get(key)
-                # vol_price_ea = f'=IF({total_cell}>=10, {val}, L{row}*M{row})'
                 vol_price_ea = f'=IF({total_cell}>=10, {val}, T{row})'
                 volume_price.value = vol_price_ea
 
@@ -414,3 +413,29 @@ def dupe_column(sheet, source_column, destination_column):
         source_cell = sheet[f"{source_column}{row}"]
         destination_cell = sheet[f"{destination_column}{row}"]
         destination_cell.value = source_cell.value
+
+def get_product_coordinates(sheet, start, stop):
+    coordinates = {}   
+    start_point = start
+    stop_point = stop
+
+    for row in range(9, sheet.max_row):
+        c_val = sheet[f'C{row}'].value
+        c_coord = sheet[f'C{row}'].coordinate
+        if c_val == start_point:
+            coordinates[start_point] = c_coord
+        elif c_val == stop_point:
+            coordinates[stop_point] = c_coord          
+    return coordinates
+
+def merge_cbds_breakdown_cells(sheet, mapping, start, stop):
+    start = mapping[start]
+    stop = mapping[stop]
+    
+    start_row_num = int(start[1:])
+    stop_row_num = int(stop[1:])
+
+    for row in range(start_row_num + 1, stop_row_num):
+        middle_val = sheet[f'G{row}'].value
+        sheet[f'F{row}'].value = middle_val
+        sheet.merge_cells(f'F{row}:H{row}')
