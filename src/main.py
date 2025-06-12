@@ -12,41 +12,27 @@ from datetime import datetime
 from openpyxl import load_workbook
 import os
 
-today = datetime.now()
-date_for_file = today.strftime('%m%d%Y%H%M%S')
-logo_file_name = 'hv_logo_sized_201_53.png'
-tmp_xlsx_name = 'Wholesale_Order_Form.xlsx'
-sheet_name = 'HVVWSGoodsOrderingSheet'
-ws_order_form_name = f'Wholesale_Order_Form_{date_for_file}.xlsx'
-strain_no_sale_list = ['DX4', 'Larry Berry', 'Black Magic', 'Chocolate Pie', 'Dosidos', 'Musk #1']
-
-# top/tinc and cfx gummies sections need to have their F, G, and H columns
-# merged to accomodate the long cannabinoid breakdown string in column G
-# these strings drive the functions 
-top_tinc = 'TOPICAL/ TINCTURES'
-top_tinc_stop = 'Happy Valley Retail Seed Pack - 6 Seeds - Auto'
-cfx_gum = 'CuratedFX Gummies - Rapid Onset - 100mg THC'
-cfx_gum_stop = 'RAPID ONSET Gummies - 100mg THC'
+####################################
+## SET UP PATHS AND STARTING XLSX ##
+####################################
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 tmp_path = os.path.abspath(os.path.join(script_dir, '..', 'tmp'))
 data_path = os.path.abspath(os.path.join(script_dir, '..', 'data'))
 img_path = os.path.abspath(os.path.join(script_dir, '..', 'img'))
 
-ws_order_form_output = funs.join_dir_file(data_path, ws_order_form_name)
-create_logo_path = funs.join_dir_file(img_path, logo_file_name)
-create_tmp_xlsx_path = funs.join_dir_file(tmp_path, tmp_xlsx_name)
+ws_order_form_output = funs.join_dir_file(data_path, cs.ws_order_form_name)
+create_logo_path = funs.join_dir_file(img_path, cs.logo_file_name)
+create_tmp_xlsx_path = funs.join_dir_file(tmp_path, cs.tmp_xlsx_name)
 
 img = Image(create_logo_path)
 file_name = create_tmp_xlsx_path
 
 wb = Workbook()
 ws = wb.active
-
 xfuns.format_white_bg(ws, 'A1:FF550')
 ws.add_image(img, 'C2')
-
-ws.title = sheet_name
+ws.title = cs.sheet_name
 wb.save(file_name)
 
 ######################
@@ -80,7 +66,7 @@ df_qty = funs.login_generate_download_report_df('FGAWSOF')
 ## DATAFRAME TRANSFORMATION START ##
 ####################################
 
-# now start building dataframe 
+# now start building main dataframe by merging the 3 dataframes from above extraction
 main_df = dfuns.merge_dfs(df_qty, df_batch_grouped, df_in_transit)
 
 # in case you couldn't tell by the function name :), removing dupe rows
@@ -90,7 +76,7 @@ main_df = dfuns.drop_dupe_rows(main_df)
 main_df = dfuns.remove_row_with_zero_qty(main_df, 'Qty Available for Sale')
 
 # remove the strains not for general whoesale
-main_df = dfuns.remove_row_with_val_in_col(main_df, 'Strain', strain_no_sale_list)
+main_df = dfuns.remove_row_with_val_in_col(main_df, 'Strain', cs.strain_no_sale_list)
 
 # sort by Inventory ID and in specified order
 sorted_df = dfuns.order_by_inventory_id(main_df)
@@ -179,7 +165,7 @@ starting_row_cat_insert_df.pop('Inventory ID')
 
 # write the finished dataframe to the excel file
 with pd.ExcelWriter(file_name, engine='openpyxl', mode='a', if_sheet_exists='overlay') as writer:
-    starting_row_cat_insert_df.to_excel(writer, sheet_name=sheet_name, startrow=6, startcol=1, index=False)
+    starting_row_cat_insert_df.to_excel(writer, sheet_name=cs.sheet_name, startrow=6, startcol=1, index=False)
 
 
 ###############################
@@ -188,7 +174,7 @@ with pd.ExcelWriter(file_name, engine='openpyxl', mode='a', if_sheet_exists='ove
 
 # start a new workbook for the remaining formatting
 new_workbook = load_workbook(file_name)
-sheet = new_workbook[sheet_name]
+sheet = new_workbook[cs.sheet_name]
 
 # remaining format updates to the sheet
 xfuns.grey_headers(sheet)
@@ -196,11 +182,26 @@ xfuns.delete_dupe_red_rows(sheet)
 xfuns.update_cat_white(sheet)
 xfuns.remove_zeros(sheet)
 xfuns.convert_float_percentage(sheet)
-# drop merge functions here
-get_top_coords = xfuns.get_product_coordinates(sheet, top_tinc, top_tinc_stop)
-xfuns.merge_cbds_breakdown_cells(sheet, get_top_coords, top_tinc, top_tinc_stop)
-get_cfxgum_coords = xfuns.get_product_coordinates(sheet, cfx_gum, cfx_gum_stop)
-xfuns.merge_cbds_breakdown_cells(sheet, get_cfxgum_coords, cfx_gum, cfx_gum_stop)
+
+# Part 1: merge the cannabinoid breakdown cell for Topical/Tinctures in column G into columns F and H (that are empty)
+# so the Total THC column isn't significantly wider
+get_top_coords = xfuns.get_product_coordinates(sheet, cs.cat_by_inventory_id['REMT-1:1-250'], cs.cat_by_inventory_id['HVG-6-SEEDPACK-AUTO'])
+xfuns.merge_cbds_breakdown_cells(sheet, get_top_coords, cs.cat_by_inventory_id['REMT-1:1-250'], cs.cat_by_inventory_id['HVG-6-SEEDPACK-AUTO'])
+
+# Part 2: merge the cannabinoid breakdown cell for CFX Gummies in column G into columns F and H (that are empty)
+# so the Total THC column isn't significantly wider
+get_cfxgum_coords = xfuns.get_product_coordinates(sheet, cs.cat_by_inventory_id['GUM100-CFX-CALM'], cs.cat_by_inventory_id['GUM100-RAPID'])
+xfuns.merge_cbds_breakdown_cells(sheet, get_cfxgum_coords, cs.cat_by_inventory_id['GUM100-CFX-CALM'], cs.cat_by_inventory_id['GUM100-RAPID'])
+
+# link the strains in FLOWER - Jar 3.5g (+) to their cultivar page on hv.org
+# get_flwr35_coords = xfuns.get_product_coordinates(sheet, cs.cat_by_inventory_id['FLWR-3.5-PLUS'], cs.cat_by_inventory_id['PR1'])
+# xfuns.link_strain_to_cultivar(sheet, get_flwr35_coords, cs.strain_to_cult_page, cs.cat_by_inventory_id['FLWR-3.5-PLUS'], cs.cat_by_inventory_id['PR1'])
+
+# link the seed strains in both seed pack sections to their genetics page on hv.org
+get_seed_coords = xfuns.get_product_coordinates(sheet, cs.cat_by_inventory_id['HVG-6-SEEDPACK-AUTO'], cs.cat_by_inventory_id['HM-DSP-LVO-1G'])
+xfuns.link_strain_to_genetics(sheet, get_seed_coords, cs.strain_to_gen_page, cs.cat_by_inventory_id['HVG-6-SEEDPACK-AUTO'], cs.cat_by_inventory_id['HM-DSP-LVO-1G'])
+
+# xfuns.link_strain_to_cultivar(sheet, cs.strain_to_page)
 xfuns.adjust_column_width(sheet)
 xfuns.center_align_columns(sheet)
 xfuns.update_value_pricing_bg(sheet)
@@ -226,6 +227,7 @@ xfuns.merge_cells_in_column(sheet, 'S', 9)
 sheet.column_dimensions['R'].width = 15
 # widening the Volume Pricing column to fit Volume Pricing messaging
 sheet.column_dimensions['S'].width = 27
+# setting coa columns to be uniform
 sheet.column_dimensions['E'].width = 16
 sheet.column_dimensions['F'].width = 16
 sheet.column_dimensions['G'].width = 16
@@ -253,11 +255,11 @@ new_workbook.save(ws_order_form_output)
 #######################################
 
 # add form to sharepoint
-# link_to_file_on_sp = sp.add_form_to_sharepoint(ws_order_form_output)
+link_to_file_on_sp = sp.add_form_to_sharepoint(ws_order_form_output)
 
 # email the output form
 # gwa.send_email(ws_order_form_output)
-# ewa.email_form_w_link(ws_order_form_output, link_to_file_on_sp)
+ewa.email_form_w_link(ws_order_form_output, link_to_file_on_sp)
 
 ##############
 ## CLEAN UP ##

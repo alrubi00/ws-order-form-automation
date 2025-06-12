@@ -38,15 +38,15 @@ def update_value_pricing_bg(sheet):
 # the downloaded report from acu doesn't play well with the code
 # you could manually resave and the file is then fine
 # this effectively does that 
-def clean_excel_file(input_path, output_path):
-    app = xw.App(visible=False)
-    try:
-        wb = app.books.open(input_path)
-        wb.save(output_path)
-        wb.close()
-    finally:
-        app.quit()
-    return output_path
+# def clean_excel_file(input_path, output_path):
+#     app = xw.App(visible=False)
+#     try:
+#         wb = app.books.open(input_path)
+#         wb.save(output_path)
+#         wb.close()
+#     finally:
+#         app.quit()
+#     return output_path
 
 
 # merge like product description columns so the same description isn't listed over and over and over
@@ -439,3 +439,35 @@ def merge_cbds_breakdown_cells(sheet, mapping, start, stop):
         middle_val = sheet[f'G{row}'].value
         sheet[f'F{row}'].value = middle_val
         sheet.merge_cells(f'F{row}:H{row}')
+
+def link_strain_to_cultivar(sheet, coords, mapping, start, stop):
+
+    start = coords[start]
+    stop = coords[stop]    
+    start_row_num = int(start[1:])
+    stop_row_num = int(stop[1:])
+
+    for row in range(start_row_num + 1, stop_row_num):
+        strain = sheet[f'C{row}'].value
+
+        if strain in mapping:
+            cult_for_url = mapping[strain]
+            sheet[f'C{row}'].hyperlink = f'https://www.happyvalley.org/about/cultivars/{cult_for_url}/'
+            font = Font(underline='single')
+            sheet[f'C{row}'].font = font
+
+def link_strain_to_genetics(sheet, coords, mapping, start, stop):
+    
+    start = coords[start]
+    stop = coords[stop]  
+    start_row_num = int(start[1:])
+    stop_row_num = int(stop[1:])
+
+    for row in range(start_row_num + 1, stop_row_num):
+        strain = sheet[f'C{row}'].value
+
+        if strain in mapping:
+            gen_for_url = mapping[strain]
+            sheet[f'C{row}'].hyperlink = f'https://happyvalleygenetics.com/our-genetics/{gen_for_url}/'
+            font = Font(underline='single')
+            sheet[f'C{row}'].font = font
