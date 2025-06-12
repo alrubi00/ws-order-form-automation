@@ -1,8 +1,18 @@
+from datetime import datetime
 
-# I/S/H
+# initial set up items
+today = datetime.now()
+date_for_file = today.strftime('%m%d%Y%H%M%S')
+logo_file_name = 'hv_logo_sized_201_53.png'
+tmp_xlsx_name = 'Wholesale_Order_Form.xlsx'
+sheet_name = 'HVVWSGoodsOrderingSheet'
+ws_order_form_name = f'Wholesale_Order_Form_{date_for_file}.xlsx'
+strain_no_sale_list = ['DX4', 'Larry Berry', 'Black Magic', 'Chocolate Pie', 'Dosidos', 'Musk #1']
+
+# strain to I/S/H mapping
 ish_dict = {'Candy Games #25':'S', 'Candy Store #25':'S', 'Sugar Shack #5':'S', 'Super Lemon Haze':'S', 'Game Over':'S', 'Banana Shack':'S',
             'End Game Cookies':'H/S', 'Little Tokyo':'H/S', 'MAC1':'H/S', 'Overtime':'H/S', 'Sourchillz':'H/S', 'Splash':'H/S', 
-            'Banana Jealousy':'H', 'Candy Store #38	':'H', 'Rainbow Belts 3.0':'H', 'Glue':'H', 'T. SAGE':'H',
+            'Banana Jealousy':'H', 'Candy Store #38':'H', 'Rainbow Belts 3.0':'H', 'Glue':'H', 'T. SAGE':'H',
             'Another Level':'H/I', 'Big Bad Wolf':'H/I', 'Candy Games #38':'H/I', 'Cross Town Traffic':'H/I', 'Dirty Taxi':'H/I', 'Dubble Tropicanna':'H/I',
             'Galatic Warheads':'', 'Garlic Icing':'H/I', 'Kush Mints x Jealousy':'H/I', 'Kut Throat Kandy':'H/I', 'Permanent Marker':'H/I', 'Sunset Sherbet':'H/I',
             'White Truffle':'H/I', 'GMO Zkittlez':'I', 'Hash Burger':'I', 'Melon Baller':'I', 'Motorbreath #15':'I', 'Stardawg':'I',
@@ -138,15 +148,6 @@ prod_desc_with_no_batch_val = ['Pure Tincture - THC - 500MG', 'Pure Terpene-Infu
 #                  ('HM-DSP-LVO-1G', 'Purple Paradox'): '$14.00',
 #                 ('CHOC100', 'Milk'): '$600.00'}
 
-# value_pricing = {('HM-DSP-LVO-1G', 'CuratedFX - Sleep'): '$15.00',
-#                  ('HM-DSP-LVO-1G', 'CuratedFX - Calm'): '$15.00',
-#                  ('HM-DSP-LVO-.5G', 'CuratedFX - Calm'): '$8.00',
-#                 ('HM-DSP-LVO-.5G', 'CuratedFX - Sleep'): '$8.00',
-#                 ('LVO-CART-.5', 'CuratedFX - Sleep'): '$8.00',
-#                 ('LVO-CART-.5', 'CuratedFX - Calm'): '$8.00',
-#                 ('LVO-CART-1', 'CuratedFX - Sleep'): '$12.50',
-#                 ('LVO-CART-1', 'CuratedFX - Calm'): '$12.50'}
-
 # the dictionary is as follows:
 # (Product Description, Strain/Flavor: Value Price)
 value_pricing = {('Hitmaker Disposable Vape 1g', 'CuratedFX - Sleep'): '$15.00',
@@ -182,3 +183,19 @@ volume_pricing = {'Flower Jar 3.5g (+)': '15.00',
                   'Gummies 100mg THC': '5.00',
                   'Gummies - Hash Rosin - 100mg THC': '10.50',
                   'Fruit Drops - 100mg THC': '5.00'}
+
+# this dictionary maps the strain to the cultivar "id" that's used to link strains
+# to the respective cultivar page on hv's website
+strain_to_cult_page = {'Candy Store #25':'candy-store-25', 'Sugar Shack #5':'sugar-shack-5',
+                    'Super Lemon Haze':'super-lemon-haze', 'Zweet OG':'zweet-og', 'End Game Cookies':'end-game-cookies',
+                    'Splash':'splash', 'Banana Jealousy':'banana-jealousy', 'Candy Store #38':'candy-store-38', 'T. SAGE':'t-sage',
+                    'Dubble Tropicanna':'dubble-tropicanna', 'Sunset Sherbet':'sunset-sherbet', 'White Truffle':'white-truffle',
+                    'GMO Zkittlez':'gmo-zkittlez', 'Melon Baller':'melon-baller', 'Motorbreath #15':'motorbreath-15', 
+                    'White Wedding':'white-wedding', 'Donny Burger':'donny-burger', 'Galactic Warheads':'galactic-warheads'
+                      }
+
+strain_to_gen_page = {'Candy Games #25':'candy-games-25', 'Candy Games #38':'candy-games-38', 'Knockout':'knockout', 'Baller\'s Game':'ballers-game',
+                      'Oh My Thai':'oh-my-thai', 'Everglades OG':'everglades-og', 'Easy Button':'easy-button',
+                      'Pineapple Daddy':'pineapple-daddy','Another Level':'another-level', 'Pineapple Diesel':'pineapple-diesel',
+                      'Short Cut': 'shortcut', 'Game Over': 'game-over', 'Overtime': 'overtime', 'Sweet 16': 'sweet-16'
+                      }
