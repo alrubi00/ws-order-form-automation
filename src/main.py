@@ -85,13 +85,16 @@ sorted_df = dfuns.order_by_inventory_id(main_df)
 sorted_df['Harvest Date'] = sorted_df['Harvest Date'].dt.strftime('%m/%d/%Y')
 
 # some old harvest dates can sneak into the dataset - generally edible or extracts or muze - they aren't to be published  
-sorted_df = dfuns.remove_old_dates(sorted_df, 'Harvest Date')
+# sorted_df = dfuns.remove_old_dates(sorted_df, 'Harvest Date')
 
-# remove harvest date from variety pack
-sorted_df.loc[sorted_df['Inventory ID'].isin(['PR5-2.5', 'PR5-5']), 'Harvest Date'] = ''
+# remove harvest date non-flower items
+sorted_df.loc[sorted_df['Inventory ID'].isin(cs.no_harvest_date), 'Harvest Date'] = ''
 
 # column header updates
 cleaned_cols_df = sorted_df.rename(columns={'Strain': 'Strain/Flavor', 'THCA': 'THC-A', 'Qty Available for Sale': 'Qty. Available'})
+
+# renaming GMO Zkittlez to GMO Z
+cleaned_cols_df['Strain/Flavor'] = cleaned_cols_df['Strain/Flavor'].replace('GMO Zkittlez', 'GMO Z')
 
 ## the next 4 steps add coluns to the df from hardcoded dictionaries
 ## this accomodates values that either aren't in acumatica or are really tough to get out acu
@@ -125,14 +128,14 @@ case_count_col_added_df.pop('Qty. Available')
 # rename the Conversion column back to Available
 case_count_col_added_df = case_count_col_added_df.rename(columns={'Qty Conversion': 'Qty. Available'})
 
-# then move I/S/H column to 3rd column
-move_ish_col_added_df = dfuns.move_column(case_count_col_added_df, 'I/S/H', 3)
+# # then move I/S/H column to 3rd column
+# move_ish_col_added_df = dfuns.move_column(case_count_col_added_df, 'I/S/H', 3)
 
-# then move Available column to 3rd column
-move_qty_col_added_df = dfuns.move_column(move_ish_col_added_df, 'Qty. Available', 13)
+# # then move Available column to 3rd column
+# move_qty_col_added_df = dfuns.move_column(move_ish_col_added_df, 'Qty. Available', 13)
 
 # remove batch details from edibles
-move_qty_col_added_df = dfuns.remove_batch_details(move_qty_col_added_df)
+move_qty_col_added_df = dfuns.remove_batch_details(case_count_col_added_df)
 
 # update cfx gummy strain/flavor to include Sleep-Calm-Focus-Energy
 move_qty_col_added_df = dfuns.update_cfx_gummies_description(move_qty_col_added_df)
@@ -158,6 +161,9 @@ starting_row_cat_insert_df = dfuns.insert_start_row(add_columns_df, cs.cat_by_in
 
 # now we can remove the inventory id column - no longer needed
 starting_row_cat_insert_df.pop('Inventory ID')
+
+# final column sorting order
+starting_row_cat_insert_df = starting_row_cat_insert_df[cs.final_col_order]
 
 ####################################
 ## DATAFRAME TRANSFORMATION END ##
@@ -185,8 +191,12 @@ xfuns.convert_float_percentage(sheet)
 
 # Part 1: merge the cannabinoid breakdown cell for Topical/Tinctures in column G into columns F and H (that are empty)
 # so the Total THC column isn't significantly wider
-get_top_coords = xfuns.get_product_coordinates(sheet, cs.cat_by_inventory_id['REMT-1:1-250'], cs.cat_by_inventory_id['HVG-6-SEEDPACK-AUTO'])
-xfuns.merge_cbds_breakdown_cells(sheet, get_top_coords, cs.cat_by_inventory_id['REMT-1:1-250'], cs.cat_by_inventory_id['HVG-6-SEEDPACK-AUTO'])
+
+get_top_coords = xfuns.get_product_coordinates(sheet, cs.cat_by_inventory_id['RSLV-1:1-250'], cs.cat_by_inventory_id['REMT-1:1-250'])
+xfuns.merge_cbds_breakdown_cells(sheet, get_top_coords, cs.cat_by_inventory_id['RSLV-1:1-250'], cs.cat_by_inventory_id['REMT-1:1-250'])
+
+get_tinc_coords = xfuns.get_product_coordinates(sheet, cs.cat_by_inventory_id['REMT-1:1-250'], cs.cat_by_inventory_id['HVG-6-SEEDPACK-AUTO'])
+xfuns.merge_cbds_breakdown_cells(sheet, get_tinc_coords, cs.cat_by_inventory_id['REMT-1:1-250'], cs.cat_by_inventory_id['HVG-6-SEEDPACK-AUTO'])
 
 # Part 2: merge the cannabinoid breakdown cell for CFX Gummies in column G into columns F and H (that are empty)
 # so the Total THC column isn't significantly wider
