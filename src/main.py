@@ -84,9 +84,6 @@ sorted_df = dfuns.order_by_inventory_id(main_df)
 # update harvest date's date format
 sorted_df['Harvest Date'] = sorted_df['Harvest Date'].dt.strftime('%m/%d/%Y')
 
-# some old harvest dates can sneak into the dataset - generally edible or extracts or muze - they aren't to be published  
-# sorted_df = dfuns.remove_old_dates(sorted_df, 'Harvest Date')
-
 # remove harvest date non-flower items
 sorted_df.loc[sorted_df['Inventory ID'].isin(cs.no_harvest_date), 'Harvest Date'] = ''
 
