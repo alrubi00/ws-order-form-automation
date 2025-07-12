@@ -128,12 +128,6 @@ case_count_col_added_df.pop('Qty. Available')
 # rename the Conversion column back to Available
 case_count_col_added_df = case_count_col_added_df.rename(columns={'Qty Conversion': 'Qty. Available'})
 
-# # then move I/S/H column to 3rd column
-# move_ish_col_added_df = dfuns.move_column(case_count_col_added_df, 'I/S/H', 3)
-
-# # then move Available column to 3rd column
-# move_qty_col_added_df = dfuns.move_column(move_ish_col_added_df, 'Qty. Available', 13)
-
 # remove batch details from edibles
 move_qty_col_added_df = dfuns.remove_batch_details(case_count_col_added_df)
 
@@ -203,7 +197,7 @@ xfuns.merge_cbds_breakdown_cells(sheet, get_tinc_coords, cs.cat_by_inventory_id[
 get_cfxgum_coords = xfuns.get_product_coordinates(sheet, cs.cat_by_inventory_id['GUM100-CFX-CALM'], cs.cat_by_inventory_id['GUM100-RAPID'])
 xfuns.merge_cbds_breakdown_cells(sheet, get_cfxgum_coords, cs.cat_by_inventory_id['GUM100-CFX-CALM'], cs.cat_by_inventory_id['GUM100-RAPID'])
 
-# link the strains in FLOWER - Jar 3.5g (+) to their cultivar page on hv.org
+# FUTURE WORK - link the strains in FLOWER - Jar 3.5g (+) to their cultivar page on hv.org
 # get_flwr35_coords = xfuns.get_product_coordinates(sheet, cs.cat_by_inventory_id['FLWR-3.5-PLUS'], cs.cat_by_inventory_id['PR1'])
 # xfuns.link_strain_to_cultivar(sheet, get_flwr35_coords, cs.strain_to_cult_page, cs.cat_by_inventory_id['FLWR-3.5-PLUS'], cs.cat_by_inventory_id['PR1'])
 

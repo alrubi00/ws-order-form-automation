@@ -8,11 +8,7 @@ from openpyxl.styles import Alignment
 from openpyxl.styles import NamedStyle
 from openpyxl.styles import Font
 from datetime import datetime
-import xlwings as xw
-import pandas as pd
-import os
 import constants as cs
-import time
 
 
 # value pricing is added to the dataframe during dataframe transformation.
@@ -34,20 +30,6 @@ def update_value_pricing_bg(sheet):
                 cell_to_update.fill = yell_fill
     
     return sheet
-
-# the downloaded report from acu doesn't play well with the code
-# you could manually resave and the file is then fine
-# this effectively does that 
-# def clean_excel_file(input_path, output_path):
-#     app = xw.App(visible=False)
-#     try:
-#         wb = app.books.open(input_path)
-#         wb.save(output_path)
-#         wb.close()
-#     finally:
-#         app.quit()
-#     return output_path
-
 
 # merge like product description columns so the same description isn't listed over and over and over
 def merge_cells_in_column(sheet, column_letter, start_row):
@@ -72,7 +54,6 @@ def merge_cells_in_column(sheet, column_letter, start_row):
             sheet.merge_cells(start_row=start_row, start_column=column_index, end_row=sheet.max_row, end_column=column_index)
 
     return sheet
-
 
 # add grey background to empty fields that aren't already red
 def grey_out_cells(sheet, last_total_row):

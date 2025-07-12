@@ -7,6 +7,11 @@ logo_file_name = 'hv_logo_sized_201_53.png'
 tmp_xlsx_name = 'Wholesale_Order_Form.xlsx'
 sheet_name = 'HVVWSGoodsOrderingSheet'
 ws_order_form_name = f'Wholesale_Order_Form_{date_for_file}.xlsx'
+
+from_email = "__hidden__"
+
+to_email = ["__hidden__"]
+
 strain_no_sale_list = ['DX4', 'Larry Berry', 'Black Magic', 'Chocolate Pie', 'Dosidos',
                        'Musk #1', 'Mimosa EVO', 'Ice Cream Cake',
                        '"Starting Line Up" - Another Level - Banana Jealousy - Hash Burger - Sugar Shack #5 - Super Lemon Haze']
@@ -44,38 +49,12 @@ ish_dict = {'Candy Games #25':'S', 'Candy Store #25':'S', 'Sugar Shack #5':'S', 
 
 harvest_list = ['Flower Jar 3.5g (+)','Head Stash 3.5g','Premium Flower Jar 1g','Pre-Roll 1g', 'Pre-Roll Blunt 1g','Pre-Roll 7-Pack 3.5g']
 
-# ordered_ids = ['HEAD-STASH-3.5', 'FLWR-3.5-PLUS', 'FLWR-3.5', 'PR1', 'PR1-KIEF', 'PR1-BLNT', 'PR5-5-BLNT', 'PRT-7',
-#                'PR5-5', 'PR5-2.5', 'MZ-7G-CGRP', 'MZ-7G-HMLN', 'MZ-7G-LMND', 'MZ-7G-STRP', 'MZ-7G-SWTM', 'MZ-7G-WLDB', 'PR2-.5-3PMZ',
-#                'PR-MNR', 'FP-MNR', 'FP-MNR-STR', 'PR-MNR-STR', 'PURET-500', 'PURET-TERP-500', 'RSLV-1:1-250',
-#                'RSO-TINC-500', 'REMT-1:1-250', 'HVG-6-SEEDPACK-AUTO', 'HVG-6-SEEDPACK-PHOTO', 'HM-DSP-LVO-.5G', 'HM-DSP-LVO-1G', 'LVO-CART-.5', 'LVO-CART-1',
-#                'LHR-CART-.5', 'SS-50', 'CFX-SS-50', 'GUM100-CFX-CALM', 'GUM100-CFX-ENERGY', 'GUM100-CFX-FOCUS',
-#                'GUM100-CFX-SLEEP', 'GUM100-CFX-20:1', 'GUM100-CFX-RELIEF', 'GUM5-CFX-20:1-P', 'GUM100-RAPID', 'FD100', 'GUM-HR-50', 'GUM-HR-100',
-#                'GUM100', 'CHOC100', 'GUM400', 'GUM1000', 'CHOC400', 'CHOC1000', 'LHR-COLDCURE', 'LHR-JAM', 'TRD-HASH']
-
 ordered_ids = ['HEAD-STASH-3.5', 'FLWR-3.5-PLUS', 'FLWR-3.5', 'PR1', 'PR-1.2-TID-INFSD', 'PR1-BLNT', 'PR2-.5-3PMZ', 'PR2-.5-INFSD-3PMZ', 'PRT-7',  'MZ-7G-CGRP', 'MZ-7G-HMLN',
                'MZ-7G-LMND', 'MZ-7G-STRP', 'MZ-7G-SWTM', 'MZ-7G-WLDB', 'PR1-KIEF', 'PR5-5-BLNT', 'PR5-5', 'PR5-2.5', 'PR-MNR', 'FP-MNR', 'FP-MNR-STR', 'PR-MNR-STR', 'RSLV-1:1-250', 'PURET-500', 'PURET-TERP-500', 
                'RSO-TINC-500', 'REMT-1:1-250', 'HVG-6-SEEDPACK-AUTO', 'HVG-6-SEEDPACK-PHOTO', 'HM-DSP-LVO-.5G', 'HM-DSP-LVO-1G', 'LVO-CART-.5', 'LVO-CART-1',
                'LHR-CART-.5', 'SS-50', 'CFX-SS-50', 'GUM100-CFX-CALM', 'GUM100-CFX-ENERGY', 'GUM100-CFX-FOCUS',
                'GUM100-CFX-SLEEP', 'GUM100-CFX-20:1', 'GUM100-CFX-RELIEF', 'GUM5-CFX-20:1-P', 'GUM100-RAPID', 'FD100', 'GUM-HR-50', 'GUM-HR-100',
                'GUM100', 'CHOC100', 'GUM400', 'GUM1000', 'CHOC400', 'CHOC1000', 'LHR-COLDCURE', 'LHR-JAM', 'TRD-HASH']
-
-# cat_by_inventory_id = {'PR1': 'PRE-ROLLS 1g', 'PR1-KIEF': 'PRE-ROLLS 1g - KIEF', 'PRT-7': 'PRE-ROLL 7-Pack 3.5g', 'LVO-CART-1': '1g 510', 'HM-DSP-LVO-.5G': 'The Hitmaker - .5g Disposable Vape',
-#                     'HM-DSP-LVO-1G': 'The Hitmaker - 1g Disposable Vape', 'GUM100-CFX-ENERGY': 'CuratedFX Gummies - Rapid Onset - 100mg THC', 'REMT-1:1-250': 'TOTINCTURES',
-#                     'GUM100-RAPID': 'RAPID ONSET Gummies - 100mg THC', 'GUM100': 'Original Gummies (Rec Dose) - 100mg THC', 'CHOC100': 'Chocolates (Rec Dose) - 100mg THC', 'SS-50': 'Stir Stix - Rapid Onset - 50mg THC',
-#                     'CFX-SS-50': 'CuratedFX Stir Stix - Rapid Onset - 50mg THC', 'FD100': 'Fruit Drops - 100mg THC', 'GUM100-CFX-CALM': 'CuratedFX Gummies - Rapid Onset - 100mg THC',
-#                     'FLWR-3.5-PLUS': 'FLOWER - Jar 3.5g (+)', 'FLWR-3.5': 'FLOWER - Jar 3.5g', 'PURET-500': 'TOPICAL/ TINCTURES', 'PR1-BLNT': 'PRE-ROLL Blunt 1g',
-#                     'RSLV-1:1-250': 'TOPICAL/ TINCTURES', 'PR5-5-BLNT': 'Pre-Roll Blunt 5-Pack 5g', 'PR-MNR': 'Moonrockets', 'FP-MNR': 'Moonrockets',
-#                     'FP-MNR-STR': 'Moonrockets', 'PR-MNR-STR': 'Moonrockets', 'LHR-CART-.5': 'Live Hash Rosin Cartridge .5g', 'LHR-COLDCURE': 'Live Hash Rosin - Cold Cure', 'LHR-JAM': 'Live Hash Rosin - Jam',
-#                     'HEAD-STASH-3.5': 'HEAD STASH 3.5g', 'PR5-5': 'PRE-ROLL 1g 5 Pack 5g', 'PR5-2.5': 'PRE-ROLL .5g 5 Pack 2.5g', 'RSO-TINC-500': 'TOPICAL/ TINCTURES',
-#                     'MZ-7G-LMND': 'muze - 7g', 'MZ-1G-CGRP': 'muze - 1g', 'MZ-1G-HMLN': 'muze - 1g', 'MZ-1G-LMND': 'muze - 1g', 'MZ-1G-STRP': 'muze - 1g',
-#                     'MZ-1G-SWTM': 'muze - 1g', 'MZ-1G-WLDB': 'muze - 1g', 'MZ-7G-CGRP': 'muze - 7g', 'MZ-7G-HMLN': 'muze - 7g', 'MZ-7G-STRP': 'muze - 7g',
-#                     'MZ-7G-SWTM': 'muze - 7g', 'MZ-7G-WLDB': 'muze - 7g', 'CHOC1000': 'Chocolates (Med Dose) - 400mg THC & 1000mg THC', 'GUM400': 'Original Gummies (Med Dose) - 400mg THC & 1000mg THC',
-#                     'CHOC400': 'Chocolates (Med Dose) - 400mg THC & 1000mg THC', 'GUM100-CFX-FOCUS': 'CuratedFX Gummies - Rapid Onset - 100mg THC', 'GUM100-CFX-SLEEP': 'CuratedFX Gummies - Rapid Onset - 100mg THC',
-#                     'PFWR-1': 'Premium Flower 1g', 'GUM1000': 'Original Gummies (Med Dose) - 400mg THC & 1000mg THC', 'LVO-CART-.5': '.5g 510', 'PURET-TERP-500': 'TOPICAL/ TINCTURES',
-#                     'TRD-HASH': 'Traditional Style Hash', 'HVG-6-SEEDPACK-AUTO': 'Happy Valley Retail Seed Pack - 6 Seeds - Auto', 'HVG-6-SEEDPACK-PHOTO': 'Happy Valley Retail Seed Pack - 6 Seeds - Photo', 'GUM5-CFX-20:1-P': 'CuratedFX Gummies - Rapid Onset - 100mg THC',
-#                     'GUM-HR-100': 'Hash Rosin Gummies - 100mg THC', 'GUM-HR-50': 'Hash Rosin Gummies', 'GUM100-CFX-20:1':'CuratedFX Gummies - Rapid Onset - 100mg THC',
-#                     'GUM100-CFX-RELIEF': 'CuratedFX Gummies - Rapid Onset - 100mg THC',
-#                     'PR2-.5-3PMZ': 'muze - 1g (2x .5g) pre-rolls', 'PR2-.5-INFSD-3PMZ': 'muze - 1g (2x .5g) infused pre-rolls'}
 
 cat_by_inventory_id = {'PR1': 'PRE-ROLLS 1g', 'PR1-KIEF': 'PRE-ROLLS 1g - KIEF', 'PRT-7': 'PRE-ROLL 7-Pack 3.5g', 'LVO-CART-1': '1g 510', 'HM-DSP-LVO-.5G': 'The Hitmaker - .5g Disposable Vape',
                     'HM-DSP-LVO-1G': 'The Hitmaker - 1g Disposable Vape', 'GUM100-CFX-ENERGY': 'CuratedFX Gummies - Rapid Onset - 100mg THC', 'REMT-1:1-250': 'TINCTURES',
@@ -157,9 +136,6 @@ servings = {'PR1': ' ', 'PR1-KIEF': ' ', 'PRT-7': ' ', 'LVO-CART-1': ' ', 'HM-DS
                     'PFWR-1': ' ', 'GUM1000': 20, 'LVO-CART-.5': ' ', 'PURET-TERP-500': ' ',
                     'TRD-HASH': ' ', 'HVG-6-SEEDPACK-AUTO': 6, 'HVG-6-SEEDPACK-PHOTO': 6, 'GUM5-CFX-20:1-P': 20, 'GUM-HR-100': 10,
                     'GUM100-CFX-20:1': 20, 'GUM100-CFX-RELIEF': 20, 'PR2-.5-3PMZ': ' ', 'PR2-.5-INFSD-3PMZ': ' ', 'PR-1.2-TID-INFSD': ' '}
-
-# cfx_gum_map = {'Berries & Cream': 'Calm - Berries & Cream', 'Lemon Lime': 'Energy - Lemon Lime',
-#                'Tropical Punch': 'Focus - Tropical Punch', 'Grape': 'Sleep - Grape', 'Blueberry': 'Sleep - Blueberry', 'Watermelon': 'Watermelon'}
 
 cfx_gum_map = {('GUM100-CFX-CALM', 'Berries & Cream'): 'Calm - Berries & Cream', ('GUM100-CFX-ENERGY', 'Lemon Lime'): 'Energy - Lemon Lime', 
                ('GUM100-CFX-FOCUS', 'Tropical Punch'): 'Focus - Tropical Punch', ('GUM100-CFX-SLEEP', 'Grape'): 'Sleep - Grape',

@@ -37,7 +37,6 @@ def remove_row_with_zero_qty(df, col):
 # because that function accounts for nulls or ''
 # the only current use case is to remove reserved strains for
 # specific customers that shouldn't be available for wholesale
-
 def remove_row_with_val_in_col(df, col, vals):
     filtered_df = df[~df[col].isin(vals)]
     return filtered_df
@@ -60,7 +59,6 @@ def add_value_to_col_based_on_other_col(df, col_to_fill, map, based_on_col):
 
 # create the main df that will drive the creation of the order form by combining
 # the 3 dataframes from the 3 endpoint downloads
-
 def merge_dfs(df1, df2, df3):
     merge_keys = ["Inventory ID", "Product Description", "Strain"]
     cols_to_merge = ['Total THC', 'THCA', 'Total Terpenes', 'TAC', 'Harvest Date']

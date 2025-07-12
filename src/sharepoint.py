@@ -11,9 +11,9 @@ def add_form_to_sharepoint(file_path):
     client_id = data['ms_c_id']
     client_secret = data['ms_c_s']
     tenant_id = data['ms_tnt_id']
-    site_name = "WsOrderForm"
-    drive_name = "Documents"
-    folder_path = "Form"
+    site_name = "__hidden__"
+    drive_name = "__hidden__"
+    folder_path = "__hidden__"
 
     file_name = os.path.basename(file_path)
 
@@ -38,7 +38,7 @@ def add_form_to_sharepoint(file_path):
 
     # get site ID
     site_resp = requests.get(
-        f"https://graph.microsoft.com/v1.0/sites/happyvalleyorg.sharepoint.com:/sites/{site_name}",
+        f"https://graph.microsoft.com/v1.0/sites/__hidden__:/sites/{site_name}",
         headers=headers
     )
     site_resp.raise_for_status()

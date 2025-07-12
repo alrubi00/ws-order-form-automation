@@ -4,6 +4,7 @@ import base64
 import os
 import yaml
 from datetime import datetime
+import constants as cs
 
 config_path = os.path.join(os.path.dirname(__file__), '../config', 'config.yaml')
 with open(config_path, 'r') as file:
@@ -15,17 +16,6 @@ def email_form_w_link(file_path, link_to_file_on_sp):
     client_id = data['ms_c_id']
     client_secret = data['ms_c_s']
     tenant_id = data['ms_tnt_id']
-
-    from_email = "donotreply@happyvalley.org"
-    to_email = [
-        "alan.rubin@happyvalley.org",
-        "kai.earthsong@happyvalley.org",
-        "ellida.cornavaca@happyvalley.org",
-        "jeremy.nestor@happyvalley.org",
-        "heather.lovett@happyvalley.org",
-        "shannon.oliver@happyvalley.org"
-            ]
-    # to_email = ["alan.rubin@happyvalley.org"]
     subject = f'Happy Valley Wholesale Order Form {date}'
     
     body = f'''<p>Please find the attached Wholesale Order Form - {date}.</p>
@@ -57,7 +47,7 @@ def email_form_w_link(file_path, link_to_file_on_sp):
     }
 
     # generate recipient list
-    recipients = [{"emailAddress": {"address": email}} for email in to_email]
+    recipients = [{"emailAddress": {"address": email}} for email in cs.to_email]
 
     message = {
         "message": {
@@ -73,7 +63,7 @@ def email_form_w_link(file_path, link_to_file_on_sp):
     }
 
     # send email with attachment
-    send_url = f"https://graph.microsoft.com/v1.0/users/{from_email}/sendMail"
+    send_url = f"https://graph.microsoft.com/v1.0/users/{cs.from_email}/sendMail"
     response = requests.post(send_url, headers={
         "Authorization": f"Bearer {access_token}",
         "Content-Type": "application/json"
