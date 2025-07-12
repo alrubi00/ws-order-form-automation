@@ -1,4 +1,4 @@
-# Wholesale Order Form Automation (OFA) - WiP
+# Wholesale Order Form Automation (OFA) - README is WiP
 
 ## Problem Statement
 As a Wholesale Team member, updates to the order form xlsx file must be manually performed before sharing with dispensary partners anywhere between 2-4 times a day. This includes (but not limited to) updating and/or removing products, inventory totals, lab results, and manually applying discounted pricing for volume and older products. Not only is it a time-consuming (1.5-3 hours a day) and tedious process, but it’s also prone to human error.
