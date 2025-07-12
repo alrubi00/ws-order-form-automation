@@ -1,7 +1,7 @@
 # Wholesale Order Form Automation (OFA)
 
 ## Problem Statement
-As a Wholesale Team member, updates the order form xlsx file must be manually performed before sharing with dispensary partners anywhere between 2-4 times a day. This includes (but not limited to) updating and/or removing products, inventory totals, lab results, and manually applying discounted updates for volume and older products. Not only is it a time-consuming (1.5-3 hours a day) and tedious process, but it’s also prone to human error.
+As a Wholesale Team member, updates to the order form xlsx file must be manually performed before sharing with dispensary partners anywhere between 2-4 times a day. This includes (but not limited to) updating and/or removing products, inventory totals, lab results, and manually applying discounted updates for volume and older products. Not only is it a time-consuming (1.5-3 hours a day) and tedious process, but it’s also prone to human error.
 
 ## Solution
 OFA will query Acumatica’s API endpoints to gather up-to-date data on what products are available to be sold out of the East Boston distribution warehouse, including lab results, quantities, and build the order form in under 3 minutes.
