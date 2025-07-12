@@ -240,7 +240,7 @@ def add_separator_row(sheet):
             if third_cell == "CuratedFX Gummies - Rapid Onset - 100mg THC" or third_cell == "CuratedFX Stir Stix - Rapid Onset - 50mg THC":
                 for col in range(1, 18):
                     row[col].fill = green_fill
-            elif third_cell == "muze - 7g" or third_cell == "muze - 1g (2x .5g) pre-rolls":
+            elif third_cell == "muze - 7g" or third_cell == "muze - 1g (2x .5g) pre-rolls" or third_cell == "muze - 1g (2x .5g) infused pre-rolls":
                 for col in range(1, 18):
                     row[col].fill = purple_fill
             elif third_cell is not None:

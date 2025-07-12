@@ -22,7 +22,6 @@ def email_form_w_link(file_path, link_to_file_on_sp):
         "kai.earthsong@happyvalley.org",
         "ellida.cornavaca@happyvalley.org",
         "jeremy.nestor@happyvalley.org",
-        "gilly.motta@happyvalley.org",
         "heather.lovett@happyvalley.org",
         "shannon.oliver@happyvalley.org"
             ]
