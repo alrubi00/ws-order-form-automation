@@ -9,7 +9,7 @@ OFA is an automated Python (v3.12.6) solution that lives on a Windows VM hosted 
 ## Process
 OFA will query Acumatica’s API endpoints to extract up-to-date data on product availability in the East Boston distribution warehouse, including lab results, quantities, merge and transform the data from the 3 extractions, then build the order form with applicable dynamic pricing formulas for volume in under 4 minutes.
 
-OFA is ETL automation that makes 6 endpoint calls to Acumatica's API to generate 3 inventory related reports. The data extracted from those downloads are then merged and transformed into one dataset. Once the dataset is complete, it’s then loaded into an xlsx file with additional/final transformations before being emailed to the Wholesale Team and uploaded to a SharePoint folder for easy distribution.
+OFA is a fully automated ETL pipeline that runs on an AWS EventBridge schedule that makes 6 endpoint calls to Acumatica's API to generate 3 inventory related reports. The data extracted from those downloads are then merged and transformed into one dataset. Once the dataset is complete, it’s then loaded into an xlsx file with additional/final transformations before being emailed to the Wholesale Team and uploaded to a SharePoint folder for easy distribution.
 
 ## Portfolio Notes
 - While this project isn't your typical data pipeline, I wanted to feature this project to demonstrate my transformation chops, both within dataframes and excel. 
