@@ -2,7 +2,7 @@
 
 ## The Wholesale Order Form (Former) Process
 
-As part of the Wholesale Team’s daily routine, they update a long standing xlsx file that is distributed to dispensary partners as an order form. 
+As part of the Wholesale Team’s former daily routine, they update a long standing xlsx file that is distributed to dispensary partners as an order form. 
 
 The order form is a list of products Happy Valley currently has available in stock with inventory totals, lab results, and pricing. The order form also contains typical fields/columns such as “Order Quantity” and “Total” for each line item with supporting formulas so if you order 10 cases of an item that costs $10 per case, the total cost for that line item is $100. With an Order Total field at the bottom of the Total column, which sums up the dollar total in that column. 
 
