@@ -1,6 +1,6 @@
 # Wholesale Order Form Automation (OFA)
 
-## The Wholesale Order Form Process
+## The Wholesale Order Form (Former) Process
 
 As part of the Wholesale Team’s daily routine, they update a long standing xlsx file that is distributed to dispensary partners as an order form. 
 
